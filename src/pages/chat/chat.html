@@ -1,0 +1,39 @@
+<!--
+  Generated template for the ChatPage page.
+
+  See http://ionicframework.com/docs/components/#navigation for more info on
+  Ionic pages and navigation.
+-->
+<ion-header>
+
+  <ion-navbar>
+    <ion-title>{{altroUtente.nome}}</ion-title>
+  </ion-navbar>
+
+</ion-header>
+
+
+<ion-content style="height: 90vh;" padding>
+<ion-infinite-scroll *ngIf="infiniteScrollEnabled" (ionInfinite)="loadMoreMessages($event)" position="top">
+     <ion-infinite-scroll-content></ion-infinite-scroll-content>
+</ion-infinite-scroll>
+<div *ngFor='let messaggio of chat'>
+  <p class="messaggio" *ngIf="messaggio.mittente.nome == altroUtente.nome" text-left>{{messaggio.testo}}</p>
+  <p  class="messaggio" *ngIf="messaggio.mittente.nome != altroUtente.nome" text-right>{{messaggio.testo}}</p>
+  <p class="timestamp" *ngIf="messaggio.mittente.nome == altroUtente.nome" text-left>{{messaggio.timestamp.getFullYear()}}-{{messaggio.timestamp.getMonth()}}-{{messaggio.timestamp.getDate()}} {{messaggio.timestamp.getHours()}}:{{messaggio.timestamp.getMinutes()}}</p>
+  <p class="timestamp" *ngIf="messaggio.mittente.nome != altroUtente.nome" text-right>{{messaggio.timestamp.getFullYear()}}-{{messaggio.timestamp.getMonth()}}-{{messaggio.timestamp.getDate()}} {{messaggio.timestamp.getHours()}}:{{messaggio.timestamp.getMinutes()}}</p>
+</div>
+
+
+</ion-content>
+
+<ion-footer>
+<form style="overflow-y: scroll;">
+<ion-item style="position: absolute; bottom: 1vh; height: 5vh;">
+  <ion-textarea placeholder="Scrivi messaggio"  [(ngModel)]="inputMessaggio" name="inputMessaggio"></ion-textarea>
+  <button (click)="sendMessage()" ion-button icon-only item-right>
+    <ion-icon name="send"></ion-icon>
+  </button>
+</ion-item>
+</form>
+</ion-footer>

@@ -1,0 +1,71 @@
+page-home {
+    .search-toolbar{
+        display: inline-block !important;
+        ion-list{
+            display: block !important;
+            margin: 0 !important;
+            #menu-toggle-button, #searchbar-side-button{
+                display: 10% !important;
+                float: left !important;
+                margin: 0 !important;
+            }
+        }
+    }
+
+    .filter-toolbar{
+        
+        button{
+            width: 100% !important;
+            background: none !important;
+            color: black !important;
+            font-size: 20px !important;
+            border: none !important;
+            box-shadow: none !important;
+            margin: 0 !important;
+            padding: 0 !important;
+            padding-left: 0 !important;
+            ion-label{
+                text-transform: initial !important;
+                margin-right: 0 !important;
+                padding-left: 30px !important;
+            }
+            ion-icon{
+                margin-right: 10px !important;
+            }
+        }
+
+    }
+
+    ion-content{
+        .inserzione-card{
+            width: 100% !important;
+            box-shadow: none !important;
+            border-bottom: 1px solid red !important;
+            margin-bottom: 25px !important;
+            ion-card-header{
+                padding: 0 !important;
+                .slide-image{
+                    margin: 0 !important;
+                    width: 100% !important;
+                    height: 40vh !important;
+                    overflow: auto !important;
+                    background-position: center !important;
+                    background-size: 50vh !important;
+                }
+            }
+            ion-card-content{
+                padding: 5px !important;
+                ion-title *{
+                    text-transform: initial !important;
+                    text-align: left !important;
+                    padding: 0 !important;
+                    font-size: 16px !important;
+                }
+                p{
+                    color: red !important;
+                }
+            }
+        }
+    }
+
+}

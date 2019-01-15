@@ -1,0 +1,112 @@
+{
+  "inserzioni":[
+  {
+  "immagini":[ "../../assets/imgs/logo.png", "../../assets/imgs/logo.png", "../../assets/imgs/logo.png" ],
+   "titolo":"Playstation",
+   "prezzo":60,
+   "dataPubblicazione":"2016-04-23T18:25:43.511Z",
+   "paese":{
+   "id": "1",
+   "nome": "Leanne Graham"
+   },
+  "id":"54",
+  "descrizione":"Antica reliquia di una civiltà perduta. Si apre come uno scrigno ma il vano è vuoto.",
+  "categoria":{
+   "id": "1",
+   "nome": "Leanne Graham"
+  },
+  "materiali":[
+   { "id": "1",
+	 "nome": "Leanne Graham"
+   },
+   { "id": "6",
+     "nome": "Mrs. Dennis Schulist"
+   }
+  ],
+  "inserzionista":{
+   "nome":"Pinco Pallino",
+   "email":"pallino.pinco@email.com",
+   "password":null,
+   "dataIscrizione":"2012-04-23T18:25:43.511Z",
+   "inserzioniPubblicate":4,
+   "inserzioniOnline":2,
+   "inserzioniPerCategoria":null,
+   "inserzioni":null
+   }
+  }
+  
+  ,
+  
+  {
+  "immagini":[ "../../assets/imgs/logo.png", "../../assets/imgs/logo.png", "../../assets/imgs/logo.png" ],
+   "titolo":"Amuleto Demoniaco",
+   "prezzo":1,
+   "dataPubblicazione":"2012-04-23T18:25:43.511Z",
+   "paese":{
+	 "id": "6",
+     "nome": "Mrs. Dennis Schulist"
+   },
+  "id":"54",
+  "descrizione":"Emana un forte odore di bruciato ma la sua superficie è perfettamente liscia e brillante. Ustionante se tenuto a contatto con materia viva troppo a lungo",
+  "categoria":{
+   "id": "6",
+   "nome": "Mrs. Dennis Schulist"
+  },
+  "materiali":[
+   { "id": "10",
+     "nome": "Clementina DuBuque"
+   },
+   { "id": "8",
+     "nome": "Nicholas Runolfsdottir V"
+   }
+  ],
+  "inserzionista":{
+   "nome":"Pinco Pallino",
+   "email":"pallino.pinco@email.com",
+   "password":null,
+   "dataIscrizione":"2012-04-23T18:25:43.511Z",
+   "inserzioniPubblicate":4,
+   "inserzioniOnline":2,
+   "inserzioniPerCategoria":null,
+   "inserzioni":null
+   }
+  }
+  
+  ,
+  
+  {
+  "immagini":[ "../../assets/imgs/logo.png", "../../assets/imgs/logo.png", "../../assets/imgs/logo.png" ],
+   "titolo":"Filatterio Lich",
+   "prezzo":250,
+   "dataPubblicazione":"2014-04-23T18:25:43.511Z",
+   "paese":{
+	 "id": "10",
+     "nome": "Clementina DuBuque"
+   },
+  "id":"54",
+  "descrizione":"Sembrano i resti di un antico bendaggio per mummificazioni. Estremamente pulito alla vista, il fascio imbratta le mani di un viscoso liquido nero se toccato",
+  "categoria":{
+    "id": "10",
+    "nome": "Clementina DuBuque"
+  },
+  "materiali":[
+   { "id": "8",
+     "nome": "Nicholas Runolfsdottir V"
+   },
+   { "id": "2",
+     "name": "Ervin Howell"
+   }
+  ],
+  "inserzionista":{
+   "nome":"Pinco Pallino",
+   "email":"pallino.pinco@email.com",
+   "password":null,
+   "dataIscrizione":"2012-04-23T18:25:43.511Z",
+   "inserzioniPubblicate":4,
+   "inserzioniOnline":2,
+   "inserzioniPerCategoria":null,
+   "inserzioni":null
+   }
+  }
+ ]
+}

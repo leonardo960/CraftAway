@@ -1,0 +1,48 @@
+<ion-header>
+  <ion-navbar>
+      <button ion-button (click)=""><ion-icon name="heart"></ion-icon></button>
+  </ion-navbar>
+</ion-header>
+
+
+<ion-content padding>
+    <ion-slides>
+
+        <ng-container *ngFor="let img of immagini">
+            <ion-slide>
+              <ion-card [ngStyle]="{'background-image':'url(' + img + ')'}" class="slide-image"></ion-card>
+            </ion-slide>
+        </ng-container>
+        
+    </ion-slides>
+    <ion-list>
+        <ion-card>
+            <ion-title [innerHTML]="inserzione.titolo"></ion-title>
+            <p [innerHTML]="inserzione.prezzo + '&euro;'"></p>
+            <p [innerHTML]="'Pubblicato il: ' + getMoreHumanDate()"></p>
+            <ion-label>Descrizione:</ion-label>
+            <p [innerHTML]="inserzione.descrizione"></p>
+        </ion-card>
+        <ion-card>
+            <ion-label>Categoria</ion-label>
+            <p [innerHTML]="inserzione.categoria.nome"></p>
+            <ion-label>Paese</ion-label>
+            <p [innerHTML]="inserzione.paese.nome"></p>
+            <ion-label>Materiali</ion-label>
+            <ng-container *ngFor="let materiale of inserzione.materiali">
+                <p> - {{materiale.nome}}</p>
+            </ng-container>
+        </ion-card>
+        <ion-card>
+                <ion-title [innerHTML]="inserzione.inserzionista.nome"></ion-title>
+                <ion-label>Annunci Pubblicati</ion-label>
+                <p [innerHTML]="inserzione.inserzionista.inserzioniPubblicate"></p>
+                <ion-label>Annunci Online</ion-label>
+                <p [innerHTML]="inserzione.inserzionista.inserzioniOnline"></p>
+            </ion-card>
+    </ion-list>
+    
+</ion-content>
+<ion-footer>
+        <button ion-button navPop><ion-icon name="paper-plane"></ion-icon>Contatta</button>
+</ion-footer>

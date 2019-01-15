@@ -1,0 +1,45 @@
+<ion-header>
+
+  <ion-navbar>
+    <ion-title>Sort results by:</ion-title>
+    <button ion-button navPop><ion-icon name="close"></ion-icon></button>
+  </ion-navbar>
+
+</ion-header>
+
+
+<ion-content padding>
+    <ion-list radio-group [(ngModel)]="selectedSort">
+
+        <ion-list-header>
+          Date
+        </ion-list-header>
+      
+        <ion-item>
+          <ion-label>Latest</ion-label>
+          <ion-radio value="0"></ion-radio>
+        </ion-item>
+      
+        <ion-item>
+          <ion-label>Oldest</ion-label>
+          <ion-radio value="1"></ion-radio>
+        </ion-item>
+
+        <ion-list-header>
+          Price
+        </ion-list-header>
+        
+        <ion-item>
+          <ion-label>Lowest Price</ion-label>
+          <ion-radio value="2"></ion-radio>
+        </ion-item>
+        
+        <ion-item>
+          <ion-label>Highest Price</ion-label>
+          <ion-radio value="3"></ion-radio>
+        </ion-item>
+      
+      </ion-list>
+
+  <button ion-button (click)="applySort()">Apply</button>
+</ion-content>

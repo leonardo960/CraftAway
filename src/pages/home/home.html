@@ -1,0 +1,57 @@
+<ion-header>
+  <ion-toolbar class="search-toolbar">
+    <ion-list>
+      <button id="menu-toggle-button" ion-button menuToggle><ion-icon name="menu"></ion-icon></button>
+
+      <ion-searchbar
+      [(ngModel)]="currentQuery"
+      [showCancelButton]="true"
+      (search)="searchbarInput($event)"
+      (ionCancel)="searchbarCancel($event)"
+      placeholder=""
+      animated="true">
+      </ion-searchbar>
+      
+      <button id="searchbar-side-button" (click)="showSearchMenu($event)" ion-button><ion-icon name="more"></ion-icon></button>
+    </ion-list>
+  </ion-toolbar>
+
+  <ion-toolbar class="filter-toolbar">
+
+    <button ion-button (click)="showFilterModal()"><ion-label>Filtri</ion-label><ion-icon name="switch"></ion-icon></button>
+
+  </ion-toolbar>
+
+  <ion-toolbar class="order-by-toolbar">
+ 
+      <button ion-button (click)="showSortModal()">
+        <ion-label>Ordina</ion-label>
+        <ion-icon name="arrow-dropdown"></ion-icon>
+      </button>
+
+  </ion-toolbar>
+  <ion-toolbar class="filter-toolbar">
+
+    <ion-label>{{getInserzioniLength()}} risultati trovati</ion-label>
+
+  </ion-toolbar>
+</ion-header>
+
+<ion-content padding>
+
+  <div *ngFor="let inserzione of inserzioni">
+    <ion-card (click)="inserzioneTapped(inserzione.id)" class="inserzione-card">
+        <ion-card-header>
+            <ion-card [ngStyle]="{'background-image':'url(' + inserzione.immagini[0] + ')'}" class="slide-image"></ion-card>
+          </ion-card-header>
+          <ion-card-content>
+              <ion-title >{{inserzione.titolo}}</ion-title>
+              <p>{{inserzione.prezzo}} &euro;</p>
+            </ion-card-content>
+    </ion-card>
+  </div>
+
+  <ion-fab right bottom>
+    <button ion-fab mini (click)="addInserzioneTapped()"><ion-icon name="add"></ion-icon></button>
+  </ion-fab>
+</ion-content>

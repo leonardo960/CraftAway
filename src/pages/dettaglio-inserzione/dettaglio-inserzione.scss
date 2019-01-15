@@ -1,0 +1,17 @@
+page-dettaglio-inserzione {
+    ion-slides{
+        height: 50% !important;
+        ion-slide{
+            padding-right: 1vh !important;
+            padding-left: 1vh !important;
+        }
+        .slide-image{
+            margin: 0 !important;
+            width: 100% !important;
+            height: 40vh !important;
+            overflow: auto !important;
+            background-position: center !important;
+            background-size: 50vh !important;
+        }
+    }
+}

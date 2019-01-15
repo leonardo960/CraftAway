@@ -1,0 +1,265 @@
+Data Model
+
+Inserzione		---------------
+string[] immagini;	---------------
+string titolo;		-dati mostrati-
+number prezzo;		-negli elenchi-
+date dataPubblicazione;	---------------
+Paese paese;		---------------
+string id; (eventualmente codificato con qualcosa tipo base64)
+string descrizione;
+Categoria categoria;
+Materiale[] materiali;
+Utente inserzionista;
+
+Utente
+string nome;
+string email;
+string password;
+date dataIscrizione;
+number inserzioniPubblicate;
+number inserzioniOnline;
+<string, number> inserzioniPerCategoria;
+Inserzione[] inserzioni;
+
+Conversazione
+string id;
+Utente utente1;
+Utente utente2;
+Messaggio[] messaggi;
+
+Messaggio
+string idConversazione;
+Utente mittente;
+Utente destinatario;
+data timestamp;
+string testo;
+
+Categoria
+number id;
+string nome;
+
+Materiale
+number id;
+string nome;
+
+Paese
+number id;
+string nome;
+
+Ricerca
+string query;
+Categoria categoria;
+Paese paese;
+Materiale[] materiali;
+number prezzoMin;
+number prezzoMax;
+
+Interfaccia App-Server REST (nel caso di successo; ogni error handling appropriato
+andr� implementato)
+
+Formato payload ove presente: JSON
+
+Client						Server
+
+/account	GET	--->header: username, password
+			<---header: token
+
+/account	POST	--->Utente
+			<---header: token
+
+/account 	DELETE	--->header: token
+			<---200 OK
+
+/account	PUT	--->Utente
+			<---200 OK
+
+/inserzioni	GET	--->header: token
+			<---Inserzione[] (le tue inserzioni)
+
+/inserzioni	POST	--->Inserzione, header:token
+			<---200 OK
+
+/inserzioni	DELETE	--->header: idInserzione, token
+			<---200 OK
+
+/inserzioni	PUT	--->Inserzione, header: token
+			<---200 OK
+
+/inserzioni/ricerca	GET	--->Ricerca
+				<---Inserzione[]
+
+/inserzioni/dettaglio	GET	--->header: idInserzione
+				<---Inserzione
+
+/inserzioni/perUtente	GET	--->header: idUtente
+				<---Inserzione[]
+
+/conversazioni	GET	--->header: token
+			<---Conversazione[]
+
+/conversazioni/chat	GET	--->header: idChat, base, offset, token
+				<---Messaggio[]
+
+/conversazioni/chat	POST	--->Messaggio, header: token
+				<---200 OK
+
+/preferiti	GET	--->header: token
+			<---Inserzione[]
+
+/preferiti	DELETE	--->header: idInserzione, token
+			<---200 OK
+
+/preferiti	POST	--->header: idInserzione, token
+			<---200 OK
+
+Progettazione singole viste:
+
+Home 
+
+Variabili:
+Inserzione[] inserzioni; (popolate nel costruttore tramite chiamata al service;
+scaricheremo quelle corrispondenti all'ultima query fatta se presente in memoria
+altrimenti � come se fosse stata effettuata una query perfettamente generica e.g.
+categoria tutte, materiali tutti, paese tutti etc. Il sort di default � quello
+dell'inserzione pi� recente)
+Enum SortType {mostRecent, lowestPrice, highestPrice}
+SortType currentSort;
+Ricerca currentSearch;
+
+Metodi:
+inserzioneTapped(idInserzione);
+addInserzioneTapped();
+showSortPopup(); (con annesso codice di ogni sort)
+showFilterPopup();-------(metodi di mockup che stanno a indicare
+resetFilters();----------tutto il codice relativo alla gestione dei filtri
+applyFilters();----------e della GUI associata ad essi)
+showSearchMenu(); (il menu in alto a destra della Home di Subito)
+saveSearch(currentSearch);
+savedSearchesTapped();
+resetCurrentSearch();
+
+
+MenuService 
+(il codice html del menu viene importato in tutti i file html dove � necessario e
+il file che lo contiene va nella stessa cartella dove risiede il .ts del service)
+
+Metodi:
+showMenu()
+goToSearch()
+goToProfile()
+goToChat()
+goToFavorites()
+goToPostInserzione()
+
+
+Salvati
+(implementato nell'html con ion-tabs: preferiti/ricerche)
+
+Variabili:
+preferiti : Inserzione[];
+ricerche : Ricerca[];
+
+Metodi:
+showCategoriesPopup() (con annesso codice per filtrare in base alla categoria; ci
+sono solo le categorie che compaiono almeno una volta nella lista dei preferiti)
+deleteFromPreferiti(idPreferito);
+deleteRicerca(idRicerca);
+startSearchWithSearch(ricerca);
+showSendMessagePopup(); (per contattare direttamente l'inserzionista;
+o mostra un popup dove inviare il primo messaggio o rimanda alla conversazione
+se gi� esistente)
+sendMessage(messaggio);
+
+InserzioneService
+
+Metodi:
+addToFavorites(idInserzione);
+removeFromFavorites(idInserzione);
+getInserzione(idInserzione);
+searchInserzioni(ricerca);
+deleteInserzione(idInserzione);
+postInserzione(inserzione);
+modifyInserzione(inserzione);
+
+ChatService
+
+Metodi:
+getConversations();
+getChat(idConversazione, base, offset);
+sendMessage(messaggio);
+
+Messaggi
+
+Variabili:
+conversazioni : Conversazione[]
+
+Metodi:
+conversazioneTapped(idConversazione);
+
+Chat
+
+Variabili:
+chat : Messaggio[]
+
+Metodi:
+sendMessage(testoMessaggio);
+loadMoreMessages();
+
+
+Profilo
+
+Variabili:
+utente : Utente
+
+Metodi:
+saveChanges();
+showLanguagePopup();
+changeLanguage(lingua);
+
+
+UtenteService
+
+Metodi:
+login(email, password);
+signup(utente);
+logout();
+deleteAccount();
+changeLanguage(lingua);
+modifyProfile(utente);
+
+
+MieInserzioni
+
+Variabili:
+inserzioni : Inserzione[]
+
+Metodi:
+inserzioneTapped(idInserzione);
+modificaInserzione(inserzione);
+deleteInserzione(idInserzione);
+addToPreferiti(idInserzione);
+deleteFromPreferiti(idInserzione);
+
+
+PubblicaInserzione / ModificaInserzione
+(da implementare con ion-slider)
+
+
+Assegnazione task:
+
+Samuele: Home, Profilo, MenuService;
+Leonardo: Messaggi, Chat, MieInserzioni, ChatService, UtenteService.
+Matteo: Salvati, PubblicaInserzione/ModificaInserzione, InserzioneService, TokenInterceptor.
+
+Per qualunque dubbio riguardante il come collegare il vostro codice al resto
+del codebase chiedete sul gruppo senza modificare i file altrui onde evitare
+conflitti sul git
+
+
+
+
+
+
+
+

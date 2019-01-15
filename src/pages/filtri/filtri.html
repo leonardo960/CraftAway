@@ -1,0 +1,87 @@
+
+<ion-header>
+
+  <ion-navbar>
+    <ion-title>Filtri</ion-title>
+    <button ion-button navPop><ion-icon name="close"></ion-icon></button>
+  </ion-navbar>
+
+</ion-header>
+
+
+<ion-content padding>
+  <ion-list>
+    <ion-item>
+      <ion-label>Country:</ion-label>
+
+      <ion-select [(ngModel)]="currentCountryID">
+
+          <ion-option [value]="0">Tutta l'Europa</ion-option>
+          <ng-container *ngFor="let country of countries">
+            <ion-option *ngIf="country.id != 0" [value]="country.id">{{country.nome}}</ion-option>
+          </ng-container>
+
+      </ion-select>
+
+    </ion-item>
+  </ion-list>
+
+  <ion-list>
+      <ion-item>
+        <ion-label>Category:</ion-label>
+  
+        <ion-select [(ngModel)]="currentCategoryID">
+
+              <ion-option [value]="0">Tutte le Categorie</ion-option>
+              <ng-container *ngFor="let category of categories">
+                <ion-option *ngIf="category.id != 0" [value]="category.id">{{category.nome}}</ion-option>
+              </ng-container>
+
+        </ion-select>
+  
+      </ion-item>
+  </ion-list>
+
+  <ion-list>
+
+      <ion-item>
+        <ion-label>Materials:</ion-label>
+  
+        <ion-select [(ngModel)]="currentMaterialsID" multiple=True disabled="{{allMaterialsSelected}}">
+            
+              <ng-container *ngFor="let material of materials">
+                <ion-option [value]="material.id"><button>{{material.nome}}</button></ion-option>
+              </ng-container>
+
+        </ion-select>
+  
+      </ion-item>
+      <ion-item>
+        <ion-label>Cerca Tutti i Materiali</ion-label>
+        <ion-toggle [(ngModel)]="allMaterialsSelected"></ion-toggle>
+      </ion-item>
+
+  </ion-list>
+
+  <ion-list>
+
+    <ion-item>
+      <ion-label>Price</ion-label>
+      <ion-select [(ngModel)]="priceRange">
+
+        <ion-option [value]="0"><button>Any price</button></ion-option>
+        <ion-option [value]="1"><button>0 - 20</button></ion-option>
+        <ion-option [value]="2"><button>20 - 50</button></ion-option>
+        <ion-option [value]="3"><button>50 - 100</button></ion-option>
+        <ion-option [value]="4"><button>100 - 200</button></ion-option>
+        <ion-option [value]="5"><button>200 +</button></ion-option>
+
+      </ion-select>
+    </ion-item>
+
+</ion-list>
+
+  
+
+  <button ion-button (click)="applyFilters()">Apply</button>
+</ion-content>
