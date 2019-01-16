@@ -23,3 +23,7 @@ export const MODIFICA_INSERZIONE_PAGE = "ModificaInserzionePage";
 export const LOGIN_PAGE = "LoginPage";
 
 export const SIGNUP_PAGE = "SignupPage";
+
+export const PREFERITI_PAGE = "PreferitiPage";
+
+export const RICERCHE_PAGE = "RicerchePage";
