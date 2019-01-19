@@ -16,12 +16,26 @@ export class RicercaService {
         return this.storage.get(this.ricercheKey);
     }
 
-    saveRicerche(newRicerche: Ricerca[]){
-        return this.storage.set(this.ricercheKey, newRicerche);
+    saveRicerca(ricerca: Ricerca) : void{
+        this.storage.get(this.ricercheKey).then(
+            (ricerche : Ricerca[]) => {
+                if(ricerche == null){
+                    this.storage.set(this.ricercheKey, [ricerca]);
+                } else {
+                    ricerche.push(ricerca);
+                    this.storage.set(this.ricercheKey, ricerche);
+                }
+            }
+        )
     }
     
-    deleteRicerche(){
-        return this.storage.remove(this.ricercheKey);
+    deleteRicerca(ricerca : Ricerca) : void{
+        this.storage.get(this.ricercheKey).then(
+            (ricerche : Ricerca[]) => {
+                ricerche = ricerche.splice(ricerche.indexOf(ricerca), 1);
+                this.storage.set(this.ricercheKey, ricerche);
+            }
+        );
     }
 
 }

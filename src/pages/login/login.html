@@ -23,7 +23,7 @@
 
   <ion-item style="margin-bottom: 2vh;">
       <ion-label color="primary" stacked>Password</ion-label>
-      <ion-input type="password" placeholder="Inserisci password"></ion-input>
+      <ion-input [(ngModel)]="password" type="password" placeholder="Inserisci password"></ion-input>
   </ion-item>
 
   <button ion-button style="width: 100%;" (click)='login()'>Entra</button>

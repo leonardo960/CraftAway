@@ -20,7 +20,6 @@ enum SortType{
   lowestPrice,
   highestPrice
 }
-
 @Component({
   selector: 'page-home',
   templateUrl: 'home.html'
@@ -62,19 +61,7 @@ export class HomePage {
     });
 
     events.subscribe('popmenu:saveSearch', () => {
-      this.ricercaService.getRicerche().then((ricerche: Ricerca[]) => {
-        if(ricerche != null){
-          console.log(ricerche);
-          let tempRicerche = ricerche;
-          tempRicerche.unshift(this.updateCurrentSearch());
-          this.ricercaService.saveRicerche(tempRicerche);
-        }else{
-          let newRicerche: Ricerca [];
-          newRicerche = [];
-          newRicerche.unshift(this.updateCurrentSearch());
-          this.ricercaService.saveRicerche(newRicerche);
-        }
-      });
+      this.ricercaService.saveRicerca(this.currentSearch);
     });
     events.subscribe('sort:applied', (newSort) =>{
       this.currentSort = newSort;
@@ -86,9 +73,7 @@ export class HomePage {
     events.subscribe('popmenu:resetSearch', () => {
       this.resetCurrentSearch();
     });
-    events.subscribe('popmenu:deleteSearches', () => {
-      this.ricercaService.deleteRicerche();
-    });
+  
 
     this.inserzioni = [];
     this.data = this.httpClient.get<Inserzione[]>("http://localhost:3000/inserzioni");

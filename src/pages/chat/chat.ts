@@ -18,39 +18,28 @@ import { Utente } from "../../model/utente";
 })
 export class ChatPage {
   chat: Messaggio[];
-  altroUtente: Utente;
   inputMessaggio: string;
+  idConversazione : string;
   infiniteScrollEnabled: boolean;
   @ViewChild(Content) content: Content;
 
   constructor(public navCtrl: NavController, public navParams: NavParams, public chatService: ChatService, public utenteService: UtenteService) {
     this.chat = [];
     this.infiniteScrollEnabled = true;
-    this.altroUtente = new Utente("AltroUtente", "altroutente@email.com", "password", new Date(), 2, 2, {}, []);
-    chatService.getChat(navParams.get('idConversazione'), 0, 8).subscribe(
-      (posts) => {
-        for(var i = 0; i < 8; i++){
-          if( i == 0){
-            this.chat.unshift(new Messaggio(navParams.get('idConversazione'), utenteService.getUtenteLoggato(), this.altroUtente, new Date(), posts[i].body));
-          } else {
-            this.chat.unshift(new Messaggio(navParams.get('idConversazione'), this.altroUtente, utenteService.getUtenteLoggato(), new Date(), posts[i].body));
-          }
-        }
-        this.content.scrollToBottom(0);
-      },
-      (err) => {
-        //error handling
-      }
-    );
-    /*chatService.getChat(navParams.get('idConversazione'), 0, 8).subscribe(
+    this.idConversazione = navParams.get('idConversazione');
+    chatService.getChat(this.idConversazione, 0, 8).subscribe(
       (messaggi) => {
+        messaggi.sort((messaggio1 : Messaggio, messaggio2 : Messaggio) : number => {
+          return messaggio2.timestamp.getTime() - messaggio1.timestamp.getTime();
+        });
         this.chat = messaggi;
         this.content.scrollToBottom(0);
       },
       (err) => {
         //error handling
+        console.log(err);
       }
-    );*/
+    );
   }
 
   ionViewDidLoad() {
@@ -62,9 +51,9 @@ export class ChatPage {
   }
 
   sendMessage(){
-    let toSend = new Messaggio(this.navParams.get("idConversazione"), this.utenteService.getUtenteLoggato(), this.altroUtente, new Date(), this.inputMessaggio);
+    let toSend = new Messaggio(this.idConversazione, this.utenteService.getUtenteLoggato(), new Utente("", "", "", new Date(), 0, 0, {}, []), new Date(), this.inputMessaggio);
     this.chatService.sendMessage(toSend).subscribe(
-      (postedObj) => {
+      (postedMessage) => {
         this.inputMessaggio = "";
         this.chat.push(toSend);
       },
@@ -75,24 +64,16 @@ export class ChatPage {
   }
 
   loadMoreMessages(infiniteScroll){
-    this.chatService.getChat(this.navParams.get('idConversazione'), this.chat.length, this.chat.length+8).subscribe(
-      (posts) => {
-        for(var i = this.chat.length; i < this.chat.length+8; i++){
-          if(i >= posts.length){
-            infiniteScroll.complete();
-            this.infiniteScrollEnabled = false;
-            return;
-          }
-          if( i % 2 == 0){
-            this.chat.unshift(new Messaggio(this.navParams.get('idConversazione'), this.utenteService.getUtenteLoggato(), this.altroUtente, new Date(), posts[i].body));
-          } else {
-            this.chat.unshift(new Messaggio(this.navParams.get('idConversazione'), this.altroUtente, this.utenteService.getUtenteLoggato(), new Date(), posts[i].body));
-          }
-        }
+    this.chatService.getChat(this.idConversazione, this.chat.length, this.chat.length+8).subscribe(
+      (messaggi) => {
+        messaggi.sort((messaggio1 : Messaggio, messaggio2 : Messaggio) : number => {
+          return messaggio2.timestamp.getTime() - messaggio1.timestamp.getTime();
+        });
+        this.chat = messaggi.concat(this.chat);
         infiniteScroll.complete();
       },
       (err) => {
-        //error handling
+        console.log(err);
       }
     );
   }

@@ -24,12 +24,11 @@ export class MessaggiPage {
 
   constructor(public utenteService: UtenteService, public navCtrl: NavController, public navParams: NavParams, public chatService: ChatService) {
     chatService.getConversations().subscribe(
-      (post) => {
-        let altroUtente = new Utente("AltroUtente", "altroutente@email.com", "password", new Date(), 2, 2, {}, []);
-        this.conversazioni = [new Conversazione("1", utenteService.getUtenteLoggato(), altroUtente, [new Messaggio("1", utenteService.getUtenteLoggato(), altroUtente, new Date(), post.body)])];
+      (conversazioni) => {
+        this.conversazioni = conversazioni;
       },
       (err) => {
-        //error handling
+        console.log(err);
       }
     )
   }

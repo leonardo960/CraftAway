@@ -12,7 +12,7 @@ export class TokenInterceptor implements HttpInterceptor {
     intercept(req: HttpRequest<any>, next: HttpHandler) : Observable<HttpEvent<any>> {
         // Get the auth token from the service.
         const authToken = this.utenteService.getActiveToken();
-        if (authToken != undefined && authToken != "") {
+        if (authToken != undefined && authToken != "" && authToken != null) {
             console.log("adding token into header");
             // Clone the request and replace the original headers with
             // cloned headers, updated with the authorization.
