@@ -10,9 +10,13 @@ export class UtenteService {
     activeToken : string;
 
     constructor(public http: HttpClient, public storage: Storage, public chatService : ChatService) {
-      /* chatService.getConversations().subscribe(
+
+    }
+
+    ngOnInit(){
+      this.chatService.getConversations().subscribe(
         (conversazioni) => {
-          storage.get("utente").then(
+          this.storage.get("utente").then(
             (utente: Utente) => {
               if(utente != null){
                 this.utenteLoggato = utente;
@@ -21,7 +25,7 @@ export class UtenteService {
               }
             }
           );
-          storage.get("token").then(
+          this.storage.get("token").then(
             (token: string) => {
               if(token != null){
                 this.activeToken = token;
@@ -36,9 +40,7 @@ export class UtenteService {
           this.utenteLoggato = null;
           this.activeToken = null;
         }
-      ); */
-      
-      
+      ); 
     }
 
     login(email : string, password : string){
