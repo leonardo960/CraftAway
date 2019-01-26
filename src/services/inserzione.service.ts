@@ -41,4 +41,19 @@ export class InserzioneService {
       //Qua ricerca non me lo invia tramite get, da rivedere, deve essere stringa in teoria
       return this.http.get<Inserzione[]>(URL.INSERZIONI_RICERCA);
     }
+
+    getPreferiti(){
+      return this.http.get<Inserzione[]>(URL.PREFERITI);
+    }
+
+    deletePreferito(idInserzione :string){
+      let headers : HttpHeaders = new HttpHeaders({"idInserzione" : idInserzione});
+      return this.http.delete<any>(URL.PREFERITI, {headers: headers})
+    }
+
+    addPreferito(idInserzione: string){
+      let headers : HttpHeaders = new HttpHeaders({"idInserzione" : idInserzione});
+      return this.http.post<any>(URL.PREFERITI, {headers: headers})
+    }
+
 }
