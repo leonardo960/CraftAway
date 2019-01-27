@@ -44,14 +44,16 @@ export class ProfiloPage {
 
   updateInformations(){
     this.utente.nome = this.nomeUtente;
-    this.utente.email = this.email;
     this.utente.password = this.password;
   }
 
   saveChanges(){
     this.updateInformations();
-    this.utenteService.modifyProfile(this.utente);
-    this.navCtrl.pop();
+    this.utenteService.modifyProfile(this.utente).subscribe(
+      (ok) => {
+        this.navCtrl.pop();
+      }
+    );
   }
 
   showLanguagePopup(myEvent){

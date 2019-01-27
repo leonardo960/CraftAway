@@ -1,4 +1,4 @@
-export const URL_BASE = 'http://192.168.178.38:8080/CraftAwayREST/rest';
+export const URL_BASE = 'http://localhost:8080/CraftAwayREST/rest';
 
 export const URL = {
     ACCOUNT: URL_BASE + "/account",
@@ -8,5 +8,8 @@ export const URL = {
     INSERZIONI_PER_UTENTE: URL_BASE + "/inserzioni/perUtente",
     CONVERSAZIONI: URL_BASE + "/conversazioni",
     CHAT: URL_BASE + "conversazioni/chat",
-    PREFERITI: URL_BASE + "/preferiti"
+    PREFERITI: URL_BASE + "/preferiti",
+    FILTRI_PAESI: URL_BASE + "/filtri/paesi",
+    FILTRI_CATEGORIE : URL_BASE + "/filtri/categorie",
+    FILTRI_MATERIALI : URL_BASE + "/filtri/materiali"
 }

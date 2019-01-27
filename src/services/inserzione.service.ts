@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { URL } from '../constants';
 import { Inserzione } from "../model/inserzione";
-import { Ricerca } from 'model/ricerca';
+import { Ricerca } from '../model/ricerca';
 @Injectable()
 export class InserzioneService {
     constructor(public http: HttpClient) {

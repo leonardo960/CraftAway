@@ -3,6 +3,7 @@ import { IonicPage, NavController, NavParams } from 'ionic-angular';
 import { Inserzione } from "../../model/inserzione";
 import { Utente } from "../../model/utente";
 import { DETTAGLIO_INSERZIONE_PAGE } from "../pages";
+import { InserzioneService } from "../../services/inserzione.service";
 /**
  * Generated class for the MieInserzioniPage page.
  *
@@ -18,13 +19,8 @@ import { DETTAGLIO_INSERZIONE_PAGE } from "../pages";
 export class MieInserzioniPage {
   inserzioni: Inserzione[];
 
-  constructor(public navCtrl: NavController, public navParams: NavParams) {
-    let utente = new Utente("Utente", "utente@email.com", "password", new Date(), 1, 1, {}, []);
-    let inserzione1 = new Inserzione(["img1"], "Cuccioli di Dumbo", 50, new Date(), {id: "1", nome: "Italia"}, "1", "Cuccioli di Dumbo freschi da sgranocchiare!", {id: "1", nome: "Snack"}, [], utente);
-    let inserzione2 = new Inserzione(["img2"], "Spade da guerra medievali assortite", 125, new Date(), {id: "2", nome: "Polonia"}, "2", "La descrizione neanche si legge da qua...", {id: "2", nome: "Armi"}, [], utente);
-    this.inserzioni = [inserzione1, inserzione2];
-
-    /*inserzioneService.getInserzioni().subscribe(
+  constructor(public navCtrl: NavController, public navParams: NavParams, public inserzioneService : InserzioneService) {
+    inserzioneService.getYourInserzioni().subscribe(
       (inserzioni : Inserzione[]) => {
         this.inserzioni = inserzioni;
       },
@@ -32,7 +28,7 @@ export class MieInserzioniPage {
         //error handling
       }
     )
-    */
+    
   }
 
   ionViewDidLoad() {

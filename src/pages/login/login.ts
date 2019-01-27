@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams } from 'ionic-angular';
 import { SIGNUP_PAGE, HOME_PAGE } from '../pages';
 import { UtenteService } from '../../services/utente.service';
+import { HttpResponse } from '@angular/common/http';
 /**
  * Generated class for the LoginPage page.
  *
@@ -38,14 +39,10 @@ export class LoginPage {
 
   login() : void {
     this.utenteService.login(this.email, this.password).subscribe(
-      (response) => {
+      (response : HttpResponse<any>) => {
         this.utenteService.setActiveToken(response.headers.get("token"));
         this.utenteService.setUtenteLoggato(response.body);
         this.navCtrl.pop();
-      },
-      (err) => {
-        //error handling
-        console.log(JSON.stringify(err));
       }
     );
   }

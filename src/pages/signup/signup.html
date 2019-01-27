@@ -16,22 +16,29 @@
 
 
 <ion-content padding>
-    <ion-item>
+  <ion-item>
+    <ion-label stacked>Nome</ion-label>
+    <ion-input [(ngModel)]="nome" type="text" placeholder="Inserisci nome"></ion-input>
+  </ion-item>  
+  
+  <ion-item>
         <ion-label stacked>Email</ion-label>
         <ion-input [(ngModel)]="email" type="email" placeholder="Inserisci email"></ion-input>
-      </ion-item>
+  </ion-item>
     
-      <ion-item style="margin-bottom: 2vh;">
-          <ion-label color="primary" stacked>Password</ion-label>
-          <ion-input type="password" placeholder="Inserisci password"></ion-input>
-      </ion-item>
-      <ion-item>
-      <ion-label stacked>Paese</ion-label>
+    
+
+  <ion-item style="margin-bottom: 2vh;">
+    <ion-label color="primary" stacked>Password</ion-label>
+    <ion-input [(ngModel)]="password" type="password" placeholder="Inserisci password"></ion-input>
+  </ion-item>
+  <ion-item>
+    <ion-label stacked>Paese</ion-label>
       <ion-select placeholder="Seleziona" [(ngModel)]="paeseId">
-          <ion-option value="1">Italia</ion-option>
-          <ion-option value="2">Spagna</ion-option>
+        <ion-option value="1">Italia</ion-option>
+        <ion-option value="2">Spagna</ion-option>
       </ion-select>
-    </ion-item>
+  </ion-item>
 
     <button ion-button (click)="signup()" style="width: 100%; margin-top: 4vh;">Invia</button>
 </ion-content>

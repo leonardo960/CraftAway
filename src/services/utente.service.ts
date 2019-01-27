@@ -14,33 +14,7 @@ export class UtenteService {
     }
 
     ngOnInit(){
-      this.chatService.getConversations().subscribe(
-        (conversazioni) => {
-          this.storage.get("utente").then(
-            (utente: Utente) => {
-              if(utente != null){
-                this.utenteLoggato = utente;
-              } else {
-                this.utenteLoggato = null;
-              }
-            }
-          );
-          this.storage.get("token").then(
-            (token: string) => {
-              if(token != null){
-                this.activeToken = token;
-              } else {
-                this.activeToken = null;
-              }
-            }
-          )
-        },
-        (err) => {
-          //Assumiamo che sia 401 forbidden
-          this.utenteLoggato = null;
-          this.activeToken = null;
-        }
-      ); 
+      
     }
 
     login(email : string, password : string){
@@ -49,7 +23,7 @@ export class UtenteService {
     }
 
     signup(utente : Utente){
-      return this.http.post<Utente>(URL.ACCOUNT, utente, {headers: {"Content-type": "application/json; charset=UTF-8"}});
+      return this.http.post<Utente>(URL.ACCOUNT, utente, {observe : 'response', headers: {"Content-type": "application/json; charset=UTF-8"}});
     }
 
     logout(){
@@ -60,13 +34,11 @@ export class UtenteService {
     }
 
     deleteAccount(){
-      let headers = new HttpHeaders();
-      headers.append("token", this.activeToken);
-      return this.http.delete<any>(URL.ACCOUNT, {headers : headers});
+      return this.http.delete<any>(URL.ACCOUNT);
     }
 
     modifyProfile(utente : Utente){
-      return this.http.put<Utente>(URL.ACCOUNT, utente, {headers: {"Content-type": "application/json; charset=UTF-8", "token" : this.activeToken}});
+      return this.http.put<Utente>(URL.ACCOUNT, utente, {headers: {"Content-type": "application/json; charset=UTF-8"}});
     }
 
     getUtenteLoggato(){
