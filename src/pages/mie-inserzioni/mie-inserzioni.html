@@ -7,24 +7,38 @@
 <ion-header>
 
   <ion-navbar>
-    <ion-title>Le tue inserzioni</ion-title>
+    <ion-title>{{"GUI_TUE_INSERZIONI" | translate}}</ion-title>
   </ion-navbar>
 
 </ion-header>
 
 
-<ion-content padding>
-  <ion-item *ngFor="let inserzione of inserzioni" (click)="inserzioneTapped(inserzione.id)">
-    <ion-img item-left style="width: 50px; height: 50px;" src="https://via.placeholder.com/50"></ion-img>
-    <p text-wrap ion-text item-center style="color: black;"><b>{{inserzione.titolo}}</b></p>
-    <p ion-text item-center style="color: red;"><b>{{inserzione.prezzo}}€</b></p>
-    <p *ngIf="inserzione.dataPubblicazione.getMinutes() >= 10" ion-text item-center style="color: grey;">{{inserzione.dataPubblicazione.getFullYear()}}-{{inserzione.dataPubblicazione.getMonth()+1}}-{{inserzione.dataPubblicazione.getDate()}} {{inserzione.dataPubblicazione.getHours()}}:{{inserzione.dataPubblicazione.getMinutes()}} - {{inserzione.paese.nome}}</p>
-    <p *ngIf="inserzione.dataPubblicazione.getMinutes() < 10" ion-text item-center style="color: grey;">{{inserzione.dataPubblicazione.getFullYear()}}-{{inserzione.dataPubblicazione.getMonth()+1}}-{{inserzione.dataPubblicazione.getDate()}} {{inserzione.dataPubblicazione.getHours()}}:0{{inserzione.dataPubblicazione.getMinutes()}} - {{inserzione.paese.nome}}</p>
-    <button (click)="showDeleteConfirmPopup()" ion-button icon-only item-right>
-      <ion-icon name="trash"></ion-icon>
-    </button>
-    <button (click)="modificaInserzione(inserzione.id)" ion-button icon-only item-right>
-      <ion-icon name="build"></ion-icon>
-    </button>
-  </ion-item>
-</ion-content>
+<ion-content>
+    <ion-list no-lines>
+    <ion-item *ngFor="let inserzione of inserzioni">
+      <ion-card class="outer-card">
+        <ion-card-header (click)="inserzioneTapped(inserzione.id)">
+          <ion-card (click)="inserzioneTapped(inserzione.id)" class="img-card" [ngStyle]="{'background-image':'url(data:image/png;base64,'+inserzione.immagini[0] + ')'}"></ion-card>
+          <ion-card class="inner-card">
+          <h1>{{inserzione.titolo}}</h1>
+          <p>{{inserzione.dataPubblicazione | date:'dd/MM/yyyy HH:mm'}}</p>
+          <p *ngIf="getCurrentLang() == 'it'">{{inserzione.paese.nome}}</p>
+          <p *ngIf="getCurrentLang() == 'en'">{{inserzione.paese.nome_inglese}}</p>
+          </ion-card>
+        </ion-card-header>
+        <ion-card-content>
+          <button id="modifica-inserzione-button" (click)="modificaInserzione(inserzione.id)" ion-button icon-only item-right>
+            <ion-icon name="build"></ion-icon>
+          </button>
+          <button id="delete-inserzione-button" (click)="deleteInserzione(inserzione.id)" ion-button icon-only item-right>
+            <ion-icon name="trash"></ion-icon>
+          </button>
+          
+        </ion-card-content>
+    </ion-card>
+      
+    </ion-item>
+  </ion-list>
+    <ion-card *ngIf="inserzioni.length == 0" class="img-card-no-preferiti"></ion-card>
+    <ion-item no-lines text-wrap *ngIf="inserzioni.length == 0" id="no-preferiti-message">{{"GUI_NO_INSERZIONI" | translate}}</ion-item>
+  </ion-content>

@@ -15,7 +15,7 @@ export class FiltriService {
         
     }
 
-    ngOnInit(){
+    init() : void {
         this.http.get<Paese[]>(URL.FILTRI_PAESI).subscribe(
             (paesi : Paese[]) => {
                 this.paesi = paesi;
@@ -40,6 +40,19 @@ export class FiltriService {
                 console.log(JSON.stringify(err));
             }
         );
+    }
+
+
+    getPaesi() : Paese[]{
+        return this.paesi;
+    }
+
+    getCategorie() : Categoria[]{
+        return this.categorie;
+    }
+
+    getMateriali() : Materiale[]{
+        return this.materiali;
     }
 
 

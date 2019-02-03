@@ -7,27 +7,26 @@
 <ion-header>
 
   <ion-navbar>
-    <ion-title>Login</ion-title>
+    <ion-title>{{"GUI_LOGIN" | translate}}</ion-title>
   </ion-navbar>
 
-  <ion-label style="font-weight: bold; margin-left: 2vh; margin-bottom: 0" >Entra in CraftAway</ion-label>
-  <ion-label style="color: gray; margin-left: 2vh; margin-top: 0">Gestici con facilità le tue inserzioni</ion-label>
+  <ion-label style="font-weight: bold; margin-left: 2vh; margin-bottom: 0" >{{"GUI_LOGIN_TITLE" | translate}}</ion-label>
+  <ion-label style="color: gray; margin-left: 2vh; margin-top: 0">{{"GUI_LOGIN_SUBTITLE" | translate}}</ion-label>
 </ion-header>
 
 
 <ion-content padding>
   <ion-item>
-    <ion-label stacked>Email</ion-label>
-    <ion-input [(ngModel)]="email" type="email" placeholder="Inserisci email"></ion-input>
+    <ion-label stacked>{{"GUI_EMAIL" | translate}}</ion-label>
+    <ion-input [(ngModel)]="email" type="email" placeholder="{{'PLACEHOLDER_INSERISCI_EMAIL' | translate}}"></ion-input>
   </ion-item>
 
   <ion-item style="margin-bottom: 2vh;">
-      <ion-label color="primary" stacked>Password</ion-label>
-      <ion-input [(ngModel)]="password" type="password" placeholder="Inserisci password"></ion-input>
+      <ion-label stacked>{{"GUI_PASSWORD" | translate}}</ion-label>
+      <ion-input [(ngModel)]="password" type="password" placeholder="{{'PLACEHOLDER_INSERISCI_PASSWORD' | translate}}"></ion-input>
   </ion-item>
 
-  <button ion-button style="width: 100%;" (click)='login()'>Entra</button>
-  <button ion-button style="width: 100%;" (click)='goToSignup()'>Registrati</button>
+  <button ion-button style="width: 100%;" (click)='login()'>{{"GUI_ENTRA" | translate}}</button>
+  <button ion-button style="width: 100%;" (click)='goToSignup()'>{{"GUI_REGISTRATI" | translate}}</button>
 
-  <ion-label (click)='forgotPassword()' color="blue">Non ricordi la password?</ion-label>
 </ion-content>

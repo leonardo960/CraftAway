@@ -32,7 +32,7 @@ export class RicercaService {
     deleteRicerca(ricerca : Ricerca) : void{
         this.storage.get(this.ricercheKey).then(
             (ricerche : Ricerca[]) => {
-                ricerche = ricerche.splice(ricerche.indexOf(ricerca), 1);
+                ricerche.splice(ricerche.indexOf(ricerca), 1);
                 this.storage.set(this.ricercheKey, ricerche);
             }
         );

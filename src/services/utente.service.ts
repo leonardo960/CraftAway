@@ -4,17 +4,32 @@ import { Utente } from "../model/utente";
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Storage } from '@ionic/storage';
 import { URL } from '../constants';
+import { Inserzione } from '../model/inserzione';
+
 @Injectable()
 export class UtenteService {
-    utenteLoggato: Utente;
-    activeToken : string;
+    utenteLoggato: Utente = null;
+    activeToken : string = null;
 
     constructor(public http: HttpClient, public storage: Storage, public chatService : ChatService) {
-
+      
     }
 
-    ngOnInit(){
-      
+    init(){
+      this.storage.get("utente").then(
+        (utente) => {
+          if(utente){
+            this.utenteLoggato = utente;
+          }
+        }
+      );
+      this.storage.get("token").then(
+        (token) => {
+          if(token){
+            this.activeToken = token;
+          }
+        }
+      );
     }
 
     login(email : string, password : string){
@@ -57,6 +72,18 @@ export class UtenteService {
     setActiveToken(token : string){
       this.activeToken = token;
       this.storage.set("token", token);
+    }
+
+    getInserzioniPreferite() {
+      return this.http.get<any>(URL.PREFERITI);
+    }
+
+    deleteInserzionePreferita(idInserzione) {
+      return this.http.delete<any>(URL.PREFERITI, {params : {"idInserzione" : idInserzione}});
+    }
+
+    addInserzionePreferita(idInserzione) {
+      return this.http.post<any>(URL.PREFERITI,{},{params : {"idInserzione" : idInserzione}});
     }
 
 

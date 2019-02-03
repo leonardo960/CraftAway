@@ -2,8 +2,8 @@
 <ion-header>
 
   <ion-navbar>
-    <ion-title>Filtri</ion-title>
     <button ion-button navPop><ion-icon name="close"></ion-icon></button>
+    {{"GUI_FILTRI" | translate}}
   </ion-navbar>
 
 </ion-header>
@@ -11,30 +11,32 @@
 
 <ion-content padding>
   <ion-list>
+    <ion-label>{{"GUI_PAESE" | translate}}:</ion-label>
     <ion-item>
-      <ion-label>Country:</ion-label>
 
-      <ion-select [(ngModel)]="currentCountryID">
+      <ion-select [(ngModel)]="currentCountryID"  okText="{{'SELECT_OKAY' | translate}}" cancelText="{{'SELECT_CANCEL' | translate}}">
 
-          <ion-option [value]="0">Tutta l'Europa</ion-option>
           <ng-container *ngFor="let country of countries">
-            <ion-option *ngIf="country.id != 0" [value]="country.id">{{country.nome}}</ion-option>
+            <ion-option *ngIf="getCurrentLang() == 'it'" [selected]="country.id == 0" [value]="country.id">{{country.nome}}</ion-option>
+            <ion-option *ngIf="getCurrentLang() == 'en'" [selected]="country.id == 0" [value]="country.id">{{country.nome_inglese}}</ion-option>
           </ng-container>
 
       </ion-select>
 
     </ion-item>
+    
   </ion-list>
 
   <ion-list>
+      <ion-label>{{"GUI_CATEGORIA" | translate}}:</ion-label>
       <ion-item>
-        <ion-label>Category:</ion-label>
+        
   
-        <ion-select [(ngModel)]="currentCategoryID">
+        <ion-select [(ngModel)]="currentCategoryID"  okText="{{'SELECT_OKAY' | translate}}" cancelText="{{'SELECT_CANCEL' | translate}}">
 
-              <ion-option [value]="0">Tutte le Categorie</ion-option>
               <ng-container *ngFor="let category of categories">
-                <ion-option *ngIf="category.id != 0" [value]="category.id">{{category.nome}}</ion-option>
+                <ion-option *ngIf="getCurrentLang() == 'it'" [selected]="category.id == 0" [value]="category.id">{{category.nome}}</ion-option>
+                <ion-option *ngIf="getCurrentLang() == 'en'" [selected]="category.id == 0" [value]="category.id">{{category.nome_inglese}}</ion-option>
               </ng-container>
 
         </ion-select>
@@ -43,33 +45,33 @@
   </ion-list>
 
   <ion-list>
-
+      <ion-label>{{"GUI_MATERIALI" | translate}}:</ion-label>
       <ion-item>
-        <ion-label>Materials:</ion-label>
+        
   
-        <ion-select [(ngModel)]="currentMaterialsID" multiple=True disabled="{{allMaterialsSelected}}">
+        <ion-select placeholder="{{materialiSelectPlaceholder}}" [(ngModel)]="currentMaterialsID" multiple=True disabled="{{allMaterialsSelected}}"  okText="{{'SELECT_OKAY' | translate}}" cancelText="{{'SELECT_CANCEL' | translate}}">
             
               <ng-container *ngFor="let material of materials">
-                <ion-option [value]="material.id"><button>{{material.nome}}</button></ion-option>
+                <ion-option [value]="material.id"><button *ngIf="getCurrentLang() == 'it'">{{material.nome}}</button><button *ngIf="getCurrentLang() == 'en'">{{material.nome_inglese}}</button></ion-option>
               </ng-container>
 
         </ion-select>
   
       </ion-item>
       <ion-item>
-        <ion-label>Cerca Tutti i Materiali</ion-label>
-        <ion-toggle [(ngModel)]="allMaterialsSelected"></ion-toggle>
+        <ion-label>{{"GUI_CERCA_TUTTI_I_MATERIALI" | translate}}</ion-label>
+        <ion-toggle (click)="toggleMaterialsSelected()" [(ngModel)]="allMaterialsSelected"></ion-toggle>
       </ion-item>
 
   </ion-list>
 
   <ion-list>
+   <ion-label>{{"GUI_PREZZO" | translate}}</ion-label>
 
     <ion-item>
-      <ion-label>Price</ion-label>
-      <ion-select [(ngModel)]="priceRange">
+      <ion-select [(ngModel)]="priceRange" okText="{{'SELECT_OKAY' | translate}}" cancelText="{{'SELECT_CANCEL' | translate}}">
 
-        <ion-option [value]="0"><button>Any price</button></ion-option>
+        <ion-option [value]="0"><button>{{"GUI_QUALUNQUE_PREZZO" | translate}}</button></ion-option>
         <ion-option [value]="1"><button>0 - 20</button></ion-option>
         <ion-option [value]="2"><button>20 - 50</button></ion-option>
         <ion-option [value]="3"><button>50 - 100</button></ion-option>
@@ -83,5 +85,8 @@
 
   
 
-  <button ion-button (click)="applyFilters()">Apply</button>
 </ion-content>
+
+<ion-footer>
+    <button ion-button (click)="applyFilters()">{{"GUI_APPLICA" | translate}}</button>
+  </ion-footer>

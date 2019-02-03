@@ -7,7 +7,7 @@ export const URL = {
     INSERZIONI_DETTAGLIO: URL_BASE + "/inserzioni/dettaglio",
     INSERZIONI_PER_UTENTE: URL_BASE + "/inserzioni/perUtente",
     CONVERSAZIONI: URL_BASE + "/conversazioni",
-    CHAT: URL_BASE + "conversazioni/chat",
+    CHAT: URL_BASE + "/conversazioni/chat",
     PREFERITI: URL_BASE + "/preferiti",
     FILTRI_PAESI: URL_BASE + "/filtri/paesi",
     FILTRI_CATEGORIE : URL_BASE + "/filtri/categorie",

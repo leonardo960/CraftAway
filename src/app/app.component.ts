@@ -1,26 +1,38 @@
 import { Component, ViewChild } from '@angular/core';
-import { Platform } from 'ionic-angular';
+import { Platform, AlertController } from 'ionic-angular';
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
 import { MenuController } from "ionic-angular";
 import { Nav } from "ionic-angular";
-
+import { TranslateService } from '@ngx-translate/core';
 import { HomePage } from "../pages/home/home";
 import { HOME_PAGE, MESSAGGI_PAGE, PROFILO_PAGE, SALVATI_PAGE, PUBBLICA_INSERZIONE_PAGE, LOGIN_PAGE, SIGNUP_PAGE, MIE_INSERZIONI_PAGE } from "../pages/pages";
 import { UtenteService } from '../services/utente.service';
-
+import { FiltriService } from '../services/filtri.service';
+import { Storage } from '@ionic/storage';
 @Component({
   templateUrl: 'app.html'
 })
 export class MyApp {
   rootPage:any = HomePage;
-
   @ViewChild(Nav) nav: Nav;
 
-  constructor(platform: Platform, statusBar: StatusBar, splashScreen: SplashScreen, private menuCtrl: MenuController, private utenteService: UtenteService) {
+  constructor(platform: Platform, statusBar: StatusBar, splashScreen: SplashScreen, private menuCtrl: MenuController, private utenteService: UtenteService, private filtriService : FiltriService, public translateService : TranslateService, private storage : Storage, public alertController : AlertController) {
     platform.ready().then(() => {
       // Okay, so the platform is ready and our plugins are available.
       // Here you can do any higher level native things you might need.
+      filtriService.init();
+      utenteService.init();
+      translateService.setDefaultLang("it");
+      storage.get("lang").then(
+        (lang) => {
+          if(lang){
+            translateService.use(lang);
+          } else {
+            translateService.use("it");
+          }
+        }
+      );
       statusBar.styleDefault();
       splashScreen.hide();
     });
@@ -62,10 +74,60 @@ export class MyApp {
     }
   }
 
+  isUserLogged() : boolean{
+    return this.utenteService.getUtenteLoggato() != null;
+  }
+
   goToNewInsertion(){
-    if(this.nav.getActive().name != PUBBLICA_INSERZIONE_PAGE){
-      this.nav.push(PUBBLICA_INSERZIONE_PAGE);
+    if(this.nav.getActive().name != PUBBLICA_INSERZIONE_PAGE)
+    {
+      if(this.isUserLogged()){
+        this.nav.push(PUBBLICA_INSERZIONE_PAGE);
+      } else {
+        this.nav.push(LOGIN_PAGE);
+      }
     }
+  }
+
+  goToLanguage(){
+    this.translateService.get("GUI_SELEZIONA_LINGUA").subscribe(
+      (translation) => {
+        this.translateService.get("SELECT_OKAY").subscribe(
+          (translation2) => {
+            this.alertController.create(
+              {
+                title: translation,
+                inputs : [
+                  {
+                    name: "lang",
+                    label: "Italiano",
+                    value: "it",
+                    type: "radio",
+                    checked : this.translateService.currentLang == "it"
+                  },
+                  {
+                    name: "lang",
+                    label: "English",
+                    value: "en",
+                    type: "radio",
+                    checked : this.translateService.currentLang == "en"
+                  }
+                ],
+                buttons : [
+                  {
+                    text: translation2,
+                    handler: (data) => {
+                      this.translateService.use(data);
+                      this.storage.set("lang", data);
+                    }
+                  }
+                ]
+              }
+            ).present();
+          }
+        );
+      }
+    );
   }
 
   goToMieInserzioni(){

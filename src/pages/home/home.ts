@@ -12,7 +12,9 @@ import { Utente } from '../../model/utente';
 import { Observable } from '../../../node_modules/rxjs/Observable';
 import { Storage } from '@ionic/storage';
 import { RicercaService } from "../../services/ricerca.service";
-//import { InserzioneService } from "../../services/inserzione.service";
+import { InserzioneService } from '../../services/inserzione.service';
+import { TranslateService } from '@ngx-translate/core';
+import { FiltriService } from '../../services/filtri.service';
 
 enum SortType{
   mostRecent,
@@ -25,15 +27,13 @@ enum SortType{
   templateUrl: 'home.html'
 })
 export class HomePage {
-
-  data: Observable<any>;
-  inserzioni: Inserzione[];
+  inserzioni: Inserzione[] = [];
 
   currentQuery: string;
   currentCountry: Paese;
-  paeseBase = new Paese("0", "");
+  paeseBase : Paese;
   currentCategory: Categoria;
-  categoriaBase = new Categoria("0", "");
+  categoriaBase : Categoria;
   currentMaterials: Materiale[];
   allMaterialsSelected: boolean;
   prezzoMin: number;
@@ -42,11 +42,21 @@ export class HomePage {
   currentSort: SortType;
   currentSearch: Ricerca;
 
-  constructor(public navCtrl: NavController, public httpClient: HttpClient, public modalCtrl: ModalController, public popCtrl: PopoverController, public events: Events, private storage: Storage, public ricercaService: RicercaService) {
-
+  constructor(public navCtrl: NavController, public httpClient: HttpClient, public modalCtrl: ModalController, public popCtrl: PopoverController, public events: Events, private storage: Storage, public ricercaService: RicercaService, public inserzioneService : InserzioneService, public translateService : TranslateService, public filtriService : FiltriService) {
+    this.paeseBase = new Paese(0, "Tutta l'Europa", "Whole Europe")
+    this.categoriaBase = new Categoria(0, "Tutte le Categorie", "All Categories");
+    inserzioneService.searchInserzioni().subscribe(
+      (results) => {
+        this.inserzioni = results;
+        this.currentSort = SortType.mostRecent;
+        this.sortInserzioni();
+      },
+      (err) => {
+        //alert error
+      }
+    );
     this.resetFilters();
 
-    this.currentSort = SortType.mostRecent;
     this.updateCurrentSearch();
 
     events.subscribe('filters:applied', (allMaterialsSelected, newCountry, newCategory, newMaterials, newMinPrice, newMaxPrice) => {
@@ -57,7 +67,14 @@ export class HomePage {
       this.prezzoMin = newMinPrice;
       this.prezzoMax = newMaxPrice;
       this.updateCurrentSearch();
-      //this.inserzioneService.searchInserzioni(this.currentSearch);
+      this.inserzioneService.searchInserzioni(this.currentSearch).subscribe(
+        (risultati) => {
+          this.inserzioni = risultati;
+        },
+        (err) => {
+          //error handling
+        }
+      );
     });
 
     events.subscribe('popmenu:saveSearch', () => {
@@ -67,32 +84,33 @@ export class HomePage {
       this.currentSort = newSort;
       this.sortInserzioni();
     });
-    events.subscribe('popmenu:gotoSavedSearch', () => {
-      this.gotoSavedSearches();
-    });
     events.subscribe('popmenu:resetSearch', () => {
       this.resetCurrentSearch();
     });
-  
-
-    this.inserzioni = [];
-    this.data = this.httpClient.get<Inserzione[]>("http://localhost:3000/inserzioni");
-    this.data.subscribe(insertionsData => {
-      for (let insertion of insertionsData) {
-        this.inserzioni.unshift(insertion);
-       }
-       this.sortInserzioni();
+    events.subscribe('tapRicerca', (ricerca) => {
+      this.currentCategory = ricerca.categoria;
+      this.currentCountry = ricerca.paese;
+      this.currentMaterials = ricerca.materiali;
+      this.currentQuery = ricerca.query;
+      this.currentSearch = ricerca;
+      this.inserzioneService.searchInserzioni(this.currentSearch).subscribe(
+        (risultati) => {
+          this.inserzioni = risultati;
+        },
+        (err) => {
+          //error handling
+        }
+      );
     });
-
-    /* this.inserzioni = [];
-    this.data = this.httpClient.post<Ricerca>(URL.INSERZIONI_RICERCA, this.currentSearch);
-    this.data.subscribe(insertionsData => {
-      for (let insertion of insertionsData) {
-        this.inserzioni.unshift(insertion);
-       }
-    }); */
+    
 
   }
+
+  getCurrentLang() : string{
+    return this.translateService.currentLang;
+  }
+
+
 
   getInserzioniLength(): number{
     return this.inserzioni.length;
@@ -100,7 +118,15 @@ export class HomePage {
 
   searchbarInput(event){
     console.log("nuova ricerca");
-    //this.inserzioneService.searchInserzioni(this.updateCurrentSearch());
+    this.updateCurrentSearch();
+    this.inserzioneService.searchInserzioni(this.updateCurrentSearch()).subscribe(
+      (risultati) => {
+        this.inserzioni = risultati;
+      },
+      (err) => {
+        //error handling
+      }
+    );
   }
 
   updateCurrentSearch(){
@@ -114,24 +140,28 @@ export class HomePage {
       this.currentSearch.prezzoMax = this.prezzoMax;
       this.currentSearch.query = this.currentQuery;
     }
-    return this.currentSearch
-  }
-
-  gotoSavedSearches(){
-
+    return this.currentSearch;
   }
 
   resetCurrentSearch(){
     this.resetFilters();
     this.updateCurrentSearch();
+    this.inserzioneService.searchInserzioni().subscribe(
+      (risultati) => {
+        this.inserzioni = risultati;
+      },
+      (err) => {
+        //error handling
+      }
+    );
   }
 
   compareInsertionsByDateInc(item1: Inserzione, item2: Inserzione): number {
-    return new Date(item1.dataPubblicazione).getTime() - new Date(item2.dataPubblicazione).getTime();
+    return new Date(item2.dataPubblicazione).getTime() - new Date(item1.dataPubblicazione).getTime();
   }
 
   compareInsertionsByDateDec(item1: Inserzione, item2: Inserzione): number {
-    return new Date(item2.dataPubblicazione).getTime() - new Date(item1.dataPubblicazione).getTime();
+    return new Date(item1.dataPubblicazione).getTime() - new Date(item2.dataPubblicazione).getTime();
   }
 
   compareInsertionsByPriceInc(item1: Inserzione, item2: Inserzione): number {
@@ -179,6 +209,9 @@ export class HomePage {
     this.goToPostInserzione();
   }
 
+  searchbarCancel(event){
+    
+  }
   showFilterModal() {
     const modal = this.modalCtrl.create(FILTERS_PAGE, {category: this.currentCategory, country: this.currentCountry, allMaterialsSelected: this.allMaterialsSelected, materials: this.currentMaterials, prezzomin: this.prezzoMin, prezzomax: this.prezzoMax});
     modal.present();
@@ -211,17 +244,15 @@ export class HomePage {
 @Component({
   template: 
   `
-    
-      <button ion-item (click)="saveSearch()">Save Search</button>
-      <button ion-item (click)="resetCurrentSearch()">Reset Search</button>
-      <button ion-item (click)="savedSearchTapped()">Your History</button>
-      <button ion-item (click)="deleteSearches()">Delete History</button>
-    
+      <ion-list style="margin: 0;" no-lines>
+      <button ion-item (click)="saveSearch()">{{'POPMENU_SALVA_RICERCA' | translate}}</button>
+      <button ion-item (click)="resetCurrentSearch()">{{'POPMENU_RESET_RICERCA' | translate}}</button>
+      </ion-list>
   `
 })
 
 export class PopMenu {
-  constructor(public viewCtrl: ViewController, public events: Events, public alertCtrl: AlertController) {}
+  constructor(public viewCtrl: ViewController, public events: Events, public alertCtrl: AlertController, public translateService : TranslateService) {}
 
   close() {
     this.viewCtrl.dismiss();
@@ -232,39 +263,9 @@ export class PopMenu {
     this.close();
   }
 
-  savedSearchesTapped(){
-    this.events.publish('popmenu:gotoSavedSearch');
-    this.close();
-  }
-
   resetCurrentSearch(){
     this.events.publish('popmenu:resetSearch');
     this.close();
-  }
-
-  deleteSearches(){
-    let confirmPopup = this.alertCtrl.create({
-      title: 'Delete History',
-      message: 'Do you really want to delete your research history?',
-      buttons: [
-        {
-          text: 'No',
-          role: 'cancel',
-          handler: () => {
-            this.close();
-          }
-        },
-        {
-          text: 'Yes',
-          handler: () => {
-            this.events.publish('popmenu:deleteSearches');
-            this.close();
-          }
-        }
-      ]
-    });
-    confirmPopup.present();
-
   }
 
 }

@@ -37,7 +37,7 @@ export class LoginPage {
     console.log("Password dimenticata!");
   }
 
-  login() : void {
+  login() {
     this.utenteService.login(this.email, this.password).subscribe(
       (response : HttpResponse<any>) => {
         this.utenteService.setActiveToken(response.headers.get("token"));

@@ -34,7 +34,6 @@ export class SortPage {
   }
 
   applySort(){
-    console.log(this.selectedSort);
     this.events.publish('sort:applied', this.selectedSort);
     this.navCtrl.pop();
   }

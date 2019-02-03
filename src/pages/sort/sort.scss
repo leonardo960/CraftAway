@@ -1,3 +1,57 @@
 page-sort {
-
+    ion-navbar{
+        text-align: center !important;
+        font-size: 20px !important;
+        button{
+            left: 5px !important;
+            top: 7px !important;
+            position: absolute !important;
+            background: none !important;
+            color: black !important;
+            box-shadow: none !important;
+        }
+    }
+    ion-list{
+        
+        ion-list-header{
+            border: none !important;
+            margin: 0 !important;
+            background: none !important;
+            ion-label{
+                font-size: 18px !important; 
+            }
+        }
+        border: none !important;
+        box-shadow: none !important;
+        ion-item{
+            background: none !important;
+            .radio-icon:not(.radio-checked){
+                .radio-inner{
+                    background: orange !important;
+                }
+            }
+            .radio-checked{
+                border-color: orange !important;
+                .radio-inner{
+                    background: orange !important;
+                }
+            }
+            
+        }
+        ion-item .item-inner{
+            border: 0 !important;
+            ion-label{
+                padding-left: 13px !important;
+            }
+        }
+    }
+    ion-footer{
+        text-align: center !important;
+        button{
+            width: 96% !important;
+            margin-bottom: 7px !important;
+            min-height: 50px !important;
+            border-radius: 0 !important;
+        }
+    }
 }

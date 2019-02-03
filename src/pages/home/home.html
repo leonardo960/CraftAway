@@ -8,7 +8,7 @@
       [showCancelButton]="true"
       (search)="searchbarInput($event)"
       (ionCancel)="searchbarCancel($event)"
-      placeholder=""
+      placeholder="{{'PLACEHOLDER_CERCA' | translate}}"
       animated="true">
       </ion-searchbar>
       
@@ -17,36 +17,34 @@
   </ion-toolbar>
 
   <ion-toolbar class="filter-toolbar">
-
-    <button ion-button (click)="showFilterModal()"><ion-label>Filtri</ion-label><ion-icon name="switch"></ion-icon></button>
-
+    <button ion-button (click)="showSortModal()">
+      <ion-label>{{"GUI_ORDINA" | translate}}</ion-label>
+      <ion-icon name="arrow-dropdown"></ion-icon>
+    </button>
+    <button ion-button (click)="showFilterModal()"><ion-label>{{"GUI_FILTRI" | translate}}</ion-label><ion-icon name="switch"></ion-icon></button>
+    
   </ion-toolbar>
 
-  <ion-toolbar class="order-by-toolbar">
- 
-      <button ion-button (click)="showSortModal()">
-        <ion-label>Ordina</ion-label>
-        <ion-icon name="arrow-dropdown"></ion-icon>
-      </button>
+  <ion-toolbar class="results-toolbar">
 
-  </ion-toolbar>
-  <ion-toolbar class="filter-toolbar">
-
-    <ion-label>{{getInserzioniLength()}} risultati trovati</ion-label>
+    <ion-label *ngIf="getCurrentLang() == 'it'">{{getInserzioniLength()}} {{"GUI_RISULTATI_TROVATI" | translate}} {{"GUI_RISULTATI_DA" | translate}} {{currentSearch.paese.nome}}</ion-label>
+    <ion-label *ngIf="getCurrentLang() == 'en'">{{getInserzioniLength()}} {{"GUI_RISULTATI_TROVATI" | translate}} {{"GUI_RISULTATI_DA" | translate}} {{currentSearch.paese.nome_inglese}}</ion-label>
 
   </ion-toolbar>
 </ion-header>
 
-<ion-content padding>
+<ion-content>
 
   <div *ngFor="let inserzione of inserzioni">
     <ion-card (click)="inserzioneTapped(inserzione.id)" class="inserzione-card">
         <ion-card-header>
-            <ion-card [ngStyle]="{'background-image':'url(' + inserzione.immagini[0] + ')'}" class="slide-image"></ion-card>
+            <ion-card [ngStyle]="{'background-image':'url(data:image/png;base64,' + inserzione.immagini[0] + ')'}" class="slide-image"></ion-card>
           </ion-card-header>
           <ion-card-content>
               <ion-title >{{inserzione.titolo}}</ion-title>
-              <p>{{inserzione.prezzo}} &euro;</p>
+              <p *ngIf="getCurrentLang() == 'it'">{{inserzione.dataPubblicazione | date:'dd/MM/yyyy HH:mm'}} - {{inserzione.paese.nome}}</p>
+              <p *ngIf="getCurrentLang() == 'en'">{{inserzione.dataPubblicazione | date:'dd/MM/yyyy HH:mm'}} - {{inserzione.paese.nome_inglese}}</p>
+
             </ion-card-content>
     </ion-card>
   </div>

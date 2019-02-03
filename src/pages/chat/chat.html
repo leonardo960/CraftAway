@@ -13,27 +13,39 @@
 </ion-header>
 
 
-<ion-content style="height: 90vh;" padding>
-<ion-infinite-scroll *ngIf="infiniteScrollEnabled" (ionInfinite)="loadMoreMessages($event)" position="top">
-     <ion-infinite-scroll-content></ion-infinite-scroll-content>
-</ion-infinite-scroll>
-<div *ngFor='let messaggio of chat'>
-  <p class="messaggio" *ngIf="messaggio.mittente.nome == altroUtente.nome" text-left>{{messaggio.testo}}</p>
-  <p  class="messaggio" *ngIf="messaggio.mittente.nome != altroUtente.nome" text-right>{{messaggio.testo}}</p>
-  <p class="timestamp" *ngIf="messaggio.mittente.nome == altroUtente.nome" text-left>{{messaggio.timestamp.getFullYear()}}-{{messaggio.timestamp.getMonth()}}-{{messaggio.timestamp.getDate()}} {{messaggio.timestamp.getHours()}}:{{messaggio.timestamp.getMinutes()}}</p>
-  <p class="timestamp" *ngIf="messaggio.mittente.nome != altroUtente.nome" text-right>{{messaggio.timestamp.getFullYear()}}-{{messaggio.timestamp.getMonth()}}-{{messaggio.timestamp.getDate()}} {{messaggio.timestamp.getHours()}}:{{messaggio.timestamp.getMinutes()}}</p>
-</div>
-
-
+<ion-content padding>
+  <ion-list no-lines>
+  <ng-container *ngFor='let messaggio of chat'>
+  <ion-item *ngIf="messaggio.mittente.email == altroUtente.email" class="messaggi-altro-utente">
+    <ion-card>
+      <ion-card-header>
+        <p text-wrap>{{messaggio.testo}}</p>
+      </ion-card-header>
+    <ion-card-content>
+        <p *ngIf="checkIfToday(messaggio.timestamp)">{{messaggio.timestamp | date:'HH:mm'}}</p>
+        <p *ngIf="!checkIfToday(messaggio.timestamp)">{{messaggio.timestamp | date:'dd/MM/yyyy HH:mm'}}</p>
+      </ion-card-content>
+  </ion-card>
+  </ion-item>
+  <ion-item *ngIf="messaggio.mittente.email != altroUtente.email" class="messaggi-utente-loggato">
+    <ion-card>  
+        <ion-card-header>
+            <p text-wrap>{{messaggio.testo}}</p>
+          </ion-card-header>
+        <ion-card-content>
+            <p *ngIf="checkIfToday(messaggio.timestamp)">{{messaggio.timestamp | date:'HH:mm'}}</p>
+        <p *ngIf="!checkIfToday(messaggio.timestamp)">{{messaggio.timestamp | date:'dd/MM/yyyy HH:mm'}}</p>
+        </ion-card-content>
+  </ion-card>
+    </ion-item>
+    
+</ng-container>
+</ion-list>
 </ion-content>
 
 <ion-footer>
-<form style="overflow-y: scroll;">
-<ion-item style="position: absolute; bottom: 1vh; height: 5vh;">
-  <ion-textarea placeholder="Scrivi messaggio"  [(ngModel)]="inputMessaggio" name="inputMessaggio"></ion-textarea>
-  <button (click)="sendMessage()" ion-button icon-only item-right>
+  <ion-textarea placeholder="{{'PLACEHOLDER_SCRIVI_MESSAGGIO' | translate}}"  [(ngModel)]="inputMessaggio" name="inputMessaggio"></ion-textarea>
+  <button (click)="sendMessage()" ion-button>
     <ion-icon name="send"></ion-icon>
   </button>
-</ion-item>
-</form>
 </ion-footer>

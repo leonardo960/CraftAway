@@ -4,6 +4,8 @@ import { Inserzione } from "../../model/inserzione";
 import { Utente } from "../../model/utente";
 import { DETTAGLIO_INSERZIONE_PAGE } from "../pages";
 import { InserzioneService } from "../../services/inserzione.service";
+import { TranslateService } from '@ngx-translate/core';
+
 /**
  * Generated class for the MieInserzioniPage page.
  *
@@ -17,11 +19,14 @@ import { InserzioneService } from "../../services/inserzione.service";
   templateUrl: 'mie-inserzioni.html',
 })
 export class MieInserzioniPage {
-  inserzioni: Inserzione[];
+  inserzioni: Inserzione[] = [];
 
-  constructor(public navCtrl: NavController, public navParams: NavParams, public inserzioneService : InserzioneService) {
+  constructor(public navCtrl: NavController, public navParams: NavParams, public inserzioneService : InserzioneService, public translateService : TranslateService) {
     inserzioneService.getYourInserzioni().subscribe(
-      (inserzioni : Inserzione[]) => {
+      (inserzioni) => {
+        for(let inserzione of inserzioni){
+          inserzione.dataPubblicazione = new Date(inserzione.dataPubblicazione as number);
+        }
         this.inserzioni = inserzioni;
       },
       (err) => {
@@ -39,8 +44,12 @@ export class MieInserzioniPage {
     this.navCtrl.push(DETTAGLIO_INSERZIONE_PAGE, {"idInserzione": idInserzione});
   }
 
-  modificaInserzione(inserzione){
+  modificaInserzione(idInserzione){
     //this.navCtrl.push(MODIFICA_INSERZIONE_PAGE, {"idInserzione": idInserzione});
+  }
+
+  getCurrentLang(){
+    return this.translateService.currentLang;
   }
 
   showDeleteConfirmPopup(){

@@ -17,45 +17,68 @@ import { Utente } from "../../model/utente";
   templateUrl: 'chat.html',
 })
 export class ChatPage {
-  chat: Messaggio[];
+  chat: Messaggio[] = [];
   inputMessaggio: string;
   idConversazione : string;
-  infiniteScrollEnabled: boolean;
+  altroUtente : Utente = new Utente("", "", "", new Date(), 0, 0, []);
   @ViewChild(Content) content: Content;
 
   constructor(public navCtrl: NavController, public navParams: NavParams, public chatService: ChatService, public utenteService: UtenteService) {
-    this.chat = [];
-    this.infiniteScrollEnabled = true;
     this.idConversazione = navParams.get('idConversazione');
-    chatService.getChat(this.idConversazione, 0, 8).subscribe(
+    chatService.getChat(this.idConversazione, 0, 1000).subscribe(
       (messaggi) => {
-        messaggi.sort((messaggio1 : Messaggio, messaggio2 : Messaggio) : number => {
-          return messaggio2.timestamp.getTime() - messaggio1.timestamp.getTime();
-        });
-        this.chat = messaggi;
-        this.content.scrollToBottom(0);
+        if(messaggi[0].mittente.email == utenteService.getUtenteLoggato().email){
+          this.altroUtente = messaggi[0].destinatario;
+        } else {
+          this.altroUtente = messaggi[0].mittente;
+        }
+        for(let i = 0; i < messaggi.length; i++){
+          this.chat.push(new Messaggio(messaggi[i].idConversazione, messaggi[i].mittente as Utente, messaggi[i].destinatario as Utente, new Date(messaggi[i].timestamp as number), messaggi[i].testo));
+        }
+        this.checkNewMessages();
       },
       (err) => {
         //error handling
-        console.log(err);
+        console.log(JSON.stringify(err));
       }
     );
+    
   }
 
   ionViewDidLoad() {
-    console.log('ionViewDidLoad ChatPage');
-  }
-
-  ionViewWillEnter() {
 
   }
+
+
+
+  checkNewMessages() {
+    this.chatService.getChat(this.idConversazione, this.chat.length, 1000).subscribe(
+      (messaggi) => {
+        for(let i = 0; i < messaggi.length; i++){
+          this.chat.push(new Messaggio(messaggi[i].idConversazione, messaggi[i].mittente as Utente, messaggi[i].destinatario as Utente, new Date(messaggi[i].timestamp as number), messaggi[i].testo));
+        }
+      },
+      (err) => {
+        //error handling
+        console.log(JSON.stringify(err));
+      }
+    );
+    if(this.navCtrl.last().instance instanceof ChatPage){
+      setTimeout(() => {this.checkNewMessages();}, 2000);
+    }
+  }
+
+  checkIfToday(timestamp){
+    return new Date().getTime() - timestamp.getTime() < 86400000;
+  }
+
+
 
   sendMessage(){
-    let toSend = new Messaggio(this.idConversazione, this.utenteService.getUtenteLoggato(), new Utente("", "", "", new Date(), 0, 0, {}, []), new Date(), this.inputMessaggio);
+    let toSend = new Messaggio(this.idConversazione, this.utenteService.getUtenteLoggato(), this.altroUtente, new Date(), this.inputMessaggio);
     this.chatService.sendMessage(toSend).subscribe(
       (postedMessage) => {
         this.inputMessaggio = "";
-        this.chat.push(toSend);
       },
       (err) => {
         console.log(err);
@@ -63,19 +86,7 @@ export class ChatPage {
     )
   }
 
-  loadMoreMessages(infiniteScroll){
-    this.chatService.getChat(this.idConversazione, this.chat.length, this.chat.length+8).subscribe(
-      (messaggi) => {
-        messaggi.sort((messaggio1 : Messaggio, messaggio2 : Messaggio) : number => {
-          return messaggio2.timestamp.getTime() - messaggio1.timestamp.getTime();
-        });
-        this.chat = messaggi.concat(this.chat);
-        infiniteScroll.complete();
-      },
-      (err) => {
-        console.log(err);
-      }
-    );
-  }
+
+
 
 }

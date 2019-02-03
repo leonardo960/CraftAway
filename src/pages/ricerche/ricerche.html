@@ -7,25 +7,43 @@
 <ion-header>
 
   <ion-navbar>
-    <ion-title>Ricerche</ion-title>
+    <ion-title>{{"GUI_RICERCHE" | translate}}</ion-title>
   </ion-navbar>
 
 </ion-header>
 
 
-<ion-content padding>
+<ion-content>
+  <ion-list no-lines>
   <ion-item *ngFor="let ricerca of ricerche" (click)="ricercaTapped(ricerca)">
-    <p><b>Ricerca: {{ricerca.query}}</b></p>
-    <p><b>Paese: {{ricerca.paese.nome}}</b></p>
-    <p><b>Categoria: {{ricerca.categoria.nome}}</b></p>
-    <p><b>Materiali:</b></p>
-    <div *ngFor="let materiale of ricerca.materiali">
-      <p><b>{{materiale.nome}}</b></p>
+    <ion-card>
+      <ion-card-header>
+
+    <p *ngIf="ricerca.query != ''">{{"GUI_RICERCA" | translate}}: <a>{{ricerca.query}}</a></p>
+    <p *ngIf="ricerca.query == ''"><a>{{"GUI_NO_RICERCA" | translate}}</a></p>
+
+    <p *ngIf="ricerca.paese.id != 0">{{"GUI_PAESE" | translate}}: <a>{{ricerca.paese.nome}}</a></p>
+    <p *ngIf="ricerca.paese.id == 0"><a>{{ricerca.paese.nome}}</a></p>
+
+    <p *ngIf="ricerca.categoria.id != 0">{{"GUI_CATEGORIA" | translate}}: <a>{{ricerca.categoria.nome}}</a></p>
+    <p *ngIf="ricerca.categoria.id == 0"><a>{{ricerca.categoria.nome}}</a></p>
+
+      </ion-card-header>
+      <ion-card-content>
+    <p >{{"GUI_MATERIALI" | translate}}:</p>
+    <div class="materiali" *ngFor="let materiale of ricerca.materiali">
+      <p><a>{{materiale.nome}}</a></p>
     </div>
-    <p><b>Prezzo:</b></p>
-    <p><b>{{ricerca.prezzoMin}}€-{{ricerca.prezzoMax}}€</b></p>
+    <p id="prezzo">{{"GUI_PREZZO" | translate}}:</p>
+    <p *ngIf="ricerca.prezzoMin != -1 && ricerca.prezzoMax != -1"><a>{{ricerca.prezzoMin}}€</a> - <a>{{ricerca.prezzoMax}}€</a></p>
+    <p *ngIf="ricerca.prezzoMin == -1 && ricerca.prezzoMax == -1"><a>{{"GUI_QUALUNQUE_PREZZO" | translate}}</a></p>
     <button (click)="eliminaRicerca(ricerca)" ion-button icon-only item-right>
       <ion-icon name="trash"></ion-icon>
     </button>
+  </ion-card-content>
+  </ion-card>
   </ion-item>
+  </ion-list>
+  <ion-card *ngIf="ricerche.length == 0" class="img-card-no-preferiti"></ion-card>
+  <ion-item no-lines text-wrap *ngIf="ricerche.length == 0" id="no-preferiti-message">{{"GUI_NO_RICERCHE" | translate}}</ion-item>
 </ion-content>

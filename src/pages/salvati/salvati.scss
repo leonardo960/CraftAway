@@ -1,3 +1,15 @@
 page-salvati {
-
+    .tabbar{
+        background: rgb(255, 206, 115) !important;
+    }
+    .tab-button[aria-selected=false]{
+        .tab-button-text{
+            color: grey !important;
+        }
+    }
+    .tab-button[aria-selected=true]{
+        .tab-button-text{
+            color: black !important;
+        }
+    }
 }

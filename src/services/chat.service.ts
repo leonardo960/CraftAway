@@ -12,16 +12,11 @@ export class ChatService {
     }
 
     getConversations(){
-      return this.http.get<Conversazione[]>(URL.CONVERSAZIONI);
+      return this.http.get<any>(URL.CONVERSAZIONI);
     }
 
     getChat(idConversazione : string, base : number, offset : number){
-      let headers : HttpHeaders = new HttpHeaders({
-        "idChat" : idConversazione,
-        "base" : base.toString(),
-        "offset" : offset.toString()
-      });
-      return this.http.get<Messaggio[]>(URL.CHAT, {headers : headers});
+      return this.http.get<any>(URL.CHAT, {params : {"idChat" : idConversazione, "base" : base.toString(), "offset" : offset.toString()}});
     }
 
     sendMessage(messaggio : Messaggio){

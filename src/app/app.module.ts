@@ -3,7 +3,8 @@ import { ErrorHandler, NgModule } from '@angular/core';
 import { IonicApp, IonicErrorHandler, IonicModule } from 'ionic-angular';
 import { SplashScreen } from '@ionic-native/splash-screen';
 import { StatusBar } from '@ionic-native/status-bar';
-
+import { TranslateModule, TranslateLoader } from '@ngx-translate/core';
+import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 import { MyApp } from './app.component';
 import { HomePage } from '../pages/home/home';
 import { MessaggiPage } from "../pages/messaggi/messaggi";
@@ -12,19 +13,25 @@ import { PopMenu } from "../pages/home/home";
 import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { ChatService } from '../services/chat.service'
 import { UtenteService } from '../services/utente.service'
+import { FiltriService } from '../services/filtri.service';
 import { IonicStorageModule } from '@ionic/storage';
 import { httpInterceptorProviders } from '../interceptors';
 import { MessaggiPageModule } from "../pages/messaggi/messaggi.module"
 import { RicercaService } from '../services/ricerca.service';
+import { InserzioneService } from '../services/inserzione.service';
 import { MieInserzioniPageModule } from '../pages/mie-inserzioni/mie-inserzioni.module';
-import { LangMenu } from '../pages/profilo/profilo';
+import { NewMessageModal } from '../pages/dettaglio-inserzione/dettaglio-inserzione';
+
+export function createTranslateLoader(http: HttpClient) {
+  return new TranslateHttpLoader(http, './assets/i18n/', '.json');
+}
 
 @NgModule({
   declarations: [
     MyApp,
     HomePage,
     PopMenu,
-    LangMenu
+    NewMessageModal
   ],
   imports: [
     BrowserModule,
@@ -32,7 +39,14 @@ import { LangMenu } from '../pages/profilo/profilo';
     IonicStorageModule.forRoot(),
     HttpClientModule,
     MessaggiPageModule,
-    MieInserzioniPageModule
+    MieInserzioniPageModule,
+    TranslateModule.forRoot({
+      loader: {
+        provide: TranslateLoader,
+        useFactory: (createTranslateLoader),
+        deps: [HttpClient]
+      }
+    })
   ],
   bootstrap: [IonicApp],
   entryComponents: [
@@ -41,7 +55,7 @@ import { LangMenu } from '../pages/profilo/profilo';
     MessaggiPage,
     MieInserzioniPage,
     PopMenu,
-    LangMenu
+    NewMessageModal
   ],
   providers: [
     StatusBar,
@@ -49,6 +63,8 @@ import { LangMenu } from '../pages/profilo/profilo';
     ChatService,
     UtenteService,
     RicercaService,
+    FiltriService,
+    InserzioneService,
     httpInterceptorProviders,
     {provide: ErrorHandler, useClass: IonicErrorHandler}
   ]

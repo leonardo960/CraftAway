@@ -7,19 +7,26 @@
 <ion-header>
 
   <ion-navbar>
-    <ion-title>Messaggi</ion-title>
+    <ion-title>{{"GUI_MESSAGGI" | translate}}</ion-title>
   </ion-navbar>
 
 </ion-header>
 
 
-<ion-content padding>
+<ion-content>
+  <ion-list no-lines>
+  <ion-item>
   <ion-card *ngFor="let conversazione of conversazioni" (click)="conversazioneTapped(conversazione.id)">
+    <ion-card-header>
+      <h1>{{conversazione.altroUtente.nome}}</h1>
+      <p>{{conversazione.messaggi[0].timestamp | date:'dd/MM/yyyy HH:mm'}}</p>
+    </ion-card-header>
     <ion-card-content >
-      <b text-left>{{conversazione.altroUtente.nome}}</b>
-      <p style="display: inline-block; margin-left: 23vh;" text-right>{{conversazione.messaggi[0].timestamp.getFullYear()}}-{{conversazione.messaggi[0].timestamp.getMonth()}}-{{conversazione.messaggi[0].timestamp.getDay()}}</p>
-      <p style="font-size: 10px; margin-right: 1vh;" text-right>{{conversazione.messaggi[0].timestamp.getHours()}}:{{conversazione.messaggi[0].timestamp.getMinutes()}}</p>
-      <p text-left style="text-overflow: ellipsis; width: 50vh; overflow: hidden; white-space: nowrap;">{{conversazione.messaggi[0].testo}}</p>
+      <p>{{conversazione.messaggi[0].testo}}</p>
     </ion-card-content>
   </ion-card>
+</ion-item>
+</ion-list>
+<ion-card *ngIf="conversazioni.length == 0" class="img-card-no-preferiti"></ion-card>
+<ion-item no-lines text-wrap *ngIf="conversazioni.length == 0" id="no-preferiti-message">{{"GUI_NO_MESSAGGI" | translate}}</ion-item>
 </ion-content>

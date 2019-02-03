@@ -1,45 +1,50 @@
 <ion-menu [content]="content" [enabled]="true">
-    <ion-header>
-      <ion-img src=""></ion-img>
-      <ion-list >
-          <button ion-item menuClose (click)="goToLogin()">
-            <ion-label>Accedi</ion-label>
+    <ion-header class="menu-header">
+      <ion-card id="logo-card"></ion-card>
+      <ion-list class="login-buttons" no-lines>
+          <button *ngIf="!isUserLogged()" ion-button menuClose (click)="goToLogin()">
+            <ion-label>{{"MENU_ACCEDI" | translate}}</ion-label>
           </button>
-          <button ion-item menuClose (click)="goToSignup()">
-            <ion-label>Registrati</ion-label>
+          <button *ngIf="!isUserLogged()" ion-button menuClose (click)="goToSignup()">
+            <ion-label>{{"MENU_REGISTRATI" | translate}}</ion-label>
           </button>
       </ion-list>
     </ion-header>
     
-    <ion-content padding>
-      <ion-list >
+    <ion-content>
+      <ion-list class="menu-list" no-lines>
         <button ion-item menuClose (click)="goToSearch()">
           <ion-icon item-start name="search"></ion-icon>
-          <ion-label>Cerca</ion-label>
+          <ion-label>{{"MENU_CERCA" | translate}}</ion-label>
         </button>
-        <button ion-item menuClose (click)="goToSaved()">
+        <button ion-item menuClose (click)="goToLanguage()">
+          <ion-icon item-start name="globe"></ion-icon>
+          <ion-label>{{"GUI_LINGUA" | translate}}</ion-label>
+        </button>
+        <button *ngIf="isUserLogged()" ion-item menuClose (click)="goToSaved()">
           <ion-icon item-start name="bookmark"></ion-icon>
-          <ion-label>Salvati</ion-label>
+          <ion-label>{{"MENU_SALVATI" | translate}}</ion-label>
         </button>
-        <button ion-item menuClose (click)="goToProfile()">
+        <button *ngIf="isUserLogged()" ion-item menuClose (click)="goToProfile()">
           <ion-icon item-start name="person"></ion-icon>
-          <ion-label>Profilo</ion-label>
+          <ion-label>{{"MENU_PROFILO" | translate}}</ion-label>
         </button>
-        <button ion-item menuClose (click)="goToChat()">
+        <button *ngIf="isUserLogged()" ion-item menuClose (click)="goToChat()">
           <ion-icon item-start name="chatboxes"></ion-icon>
-          <ion-label>Messaggi</ion-label>
+          <ion-label>{{"MENU_MESSAGGI" | translate}}</ion-label>
         </button>
-        <button ion-item menuClose (click)="goToMieInserzioni()">
+        <button *ngIf="isUserLogged()" ion-item menuClose (click)="goToMieInserzioni()">
           <ion-icon item-start name="folder-open"></ion-icon>
-          <ion-label>Le tue inserzioni</ion-label>
+          <ion-label>{{"MENU_INSERZIONI" | translate}}</ion-label>
         </button>
       </ion-list>
 
-      <button ion-item menuClose (click)="goToNewInsertion()">
-          <ion-icon item-start name="add"></ion-icon>
-          <ion-label>Nuova Inserzione</ion-label>
-      </button>
+      
     </ion-content>
-    
+    <ion-footer class="menu-footer">
+      <button ion-item no-lines menuClose (click)="goToNewInsertion()">
+        <ion-icon item-start name="add"></ion-icon>
+        <ion-label>{{"MENU_NUOVA_INSERZIONE" | translate}}</ion-label>
+    </button>    </ion-footer>
 </ion-menu>
 <ion-nav #content [root]="rootPage"></ion-nav>

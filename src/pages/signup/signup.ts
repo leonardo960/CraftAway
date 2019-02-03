@@ -2,6 +2,8 @@ import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams } from 'ionic-angular';
 import { UtenteService } from "../../services/utente.service";
 import { Utente } from "../../model/utente";
+import { Paese } from "../../model/paese";
+import { FiltriService } from "../../services/filtri.service";
 /**
  * Generated class for the SignupPage page.
  *
@@ -20,7 +22,7 @@ export class SignupPage {
   password : string;
   paeseId : string;
   nome : string;
-  constructor(public navCtrl: NavController, public navParams: NavParams, public utenteService: UtenteService) {
+  constructor(public navCtrl: NavController, public navParams: NavParams, public utenteService: UtenteService, public filtriService : FiltriService) {
   
   }
 
@@ -29,7 +31,7 @@ export class SignupPage {
   }
 
   signup() : void {
-    let newUtente : Utente = new Utente(this.nome, this.email, this.password, new Date(), 0, 0, "{}", []);
+    let newUtente : Utente = new Utente(this.nome, this.email, this.password, new Date(), 0, 0, []);
 
     this.utenteService.signup(newUtente).subscribe(
       (response) => {

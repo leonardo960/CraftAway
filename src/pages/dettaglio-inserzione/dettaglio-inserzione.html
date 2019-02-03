@@ -1,48 +1,51 @@
 <ion-header>
   <ion-navbar>
-      <button ion-button (click)=""><ion-icon name="heart"></ion-icon></button>
+      <ion-title>{{inserzione.titolo}}</ion-title>
+      <button id="preferito-button" (click)="addRemovePreferito(inserzione.id)"><ion-icon [style.color]="isInserzionePreferita ? 'red' : 'rgb(255, 206, 115)'" name="heart"></ion-icon></button>
   </ion-navbar>
 </ion-header>
 
 
-<ion-content padding>
-    <ion-slides>
-
-        <ng-container *ngFor="let img of immagini">
+<ion-content>
+    <ion-slides pager="true">
+        <ng-container *ngFor="let img of inserzione.immagini; let i = index">
             <ion-slide>
-              <ion-card [ngStyle]="{'background-image':'url(' + img + ')'}" class="slide-image"></ion-card>
+              <ion-card [ngStyle]="{'background-image':'url(data:image/png;base64,' + img + ')'}" class="slide-image"></ion-card>
             </ion-slide>
         </ng-container>
-        
     </ion-slides>
+    
     <ion-list>
-        <ion-card>
+        <ion-card class="info-card">
             <ion-title [innerHTML]="inserzione.titolo"></ion-title>
-            <p [innerHTML]="inserzione.prezzo + '&euro;'"></p>
-            <p [innerHTML]="'Pubblicato il: ' + getMoreHumanDate()"></p>
-            <ion-label>Descrizione:</ion-label>
+            <p>Pubblicato il: {{inserzione.dataPubblicazione | date:'dd/MM/yyyy HH:mm'}}</p>
+            <h1 [innerHTML]="inserzione.prezzo + '&euro;'"></h1>
+            <ion-label>{{"GUI_DESCRIZIONE" | translate}}:</ion-label>
             <p [innerHTML]="inserzione.descrizione"></p>
         </ion-card>
-        <ion-card>
-            <ion-label>Categoria</ion-label>
-            <p [innerHTML]="inserzione.categoria.nome"></p>
-            <ion-label>Paese</ion-label>
-            <p [innerHTML]="inserzione.paese.nome"></p>
-            <ion-label>Materiali</ion-label>
+        <ion-card class="info-card">
+            <ion-label>{{"GUI_CATEGORIA" | translate}}</ion-label>
+            <p *ngIf="getCurrentLang() == 'it'">{{inserzione.categoria.nome}}</p>
+            <p *ngIf="getCurrentLang() == 'en'">{{inserzione.categoria.nome_inglese}}</p>
+            <ion-label>{{"GUI_PAESE" | translate}}</ion-label>
+            <p *ngIf="getCurrentLang() == 'it'">{{inserzione.paese.nome}}</p>
+            <p *ngIf="getCurrentLang() == 'en'">{{inserzione.paese.nome_inglese}}</p>
+            <ion-label>{{"GUI_MATERIALI" | translate}}</ion-label>
             <ng-container *ngFor="let materiale of inserzione.materiali">
-                <p> - {{materiale.nome}}</p>
+                <p class="materiali" *ngIf="getCurrentLang() == 'it'"> - {{materiale.nome}}</p>
+                <p class="materiali" *ngIf="getCurrentLang() == 'en'"> - {{materiale.nome_inglese}}</p>
             </ng-container>
         </ion-card>
-        <ion-card>
-                <ion-title [innerHTML]="inserzione.inserzionista.nome"></ion-title>
-                <ion-label>Annunci Pubblicati</ion-label>
+        <ion-card id="inserzionista-card" *ngIf="inserzione.inserzionista.email != utenteLoggato.email">
+                <h2 [innerHTML]="inserzione.inserzionista.nome"></h2>
+                <ion-label>{{"GUI_INSERZIONI_PUBBLICATE" | translate}}</ion-label>
                 <p [innerHTML]="inserzione.inserzionista.inserzioniPubblicate"></p>
-                <ion-label>Annunci Online</ion-label>
+                <ion-label>{{"GUI_INSERZIONI_ONLINE" | translate}}</ion-label>
                 <p [innerHTML]="inserzione.inserzionista.inserzioniOnline"></p>
             </ion-card>
     </ion-list>
     
 </ion-content>
 <ion-footer>
-        <button ion-button navPop><ion-icon name="paper-plane"></ion-icon>Contatta</button>
+        <button ion-button *ngIf="inserzione.inserzionista.email != utenteLoggato.email" (click)="contattaInserzionista()"><ion-icon name="paper-plane"></ion-icon>{{"GUI_CONTATTA" | translate}}</button>
 </ion-footer>

@@ -10,12 +10,12 @@
 <ion-header>
 
   <ion-navbar>
-    <ion-title>Salvati</ion-title>
+    <ion-title>{{"GUI_SALVATI" | translate}}</ion-title>
   </ion-navbar>
   
 </ion-header>
 
 <ion-tabs tabsPlacement="top">
-    <ion-tab [root]="preferiti" tabTitle="Preferiti"></ion-tab>
-    <ion-tab [root]="ricerche" tabTitle="Ricerche"></ion-tab>
+    <ion-tab [root]="preferiti" tabTitle="{{'GUI_PREFERITI' | translate | uppercase}}"></ion-tab>
+    <ion-tab [root]="ricerche" tabTitle="{{'GUI_RICERCHE' | translate | uppercase}}"></ion-tab>
 </ion-tabs>

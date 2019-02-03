@@ -3,12 +3,9 @@ import { IonicPage, NavController, NavParams } from 'ionic-angular';
 import { Materiale } from '../../model/materiale';
 import { Categoria } from '../../model/categoria';
 import { Paese } from '../../model/paese';
-import { Observable } from '../../../node_modules/rxjs/Observable';
-import { URL_BASE, URL } from "../../constants"
-import { HttpClient } from '@angular/common/http';
 import { Events } from 'ionic-angular';
-import { ValueTransformer } from '../../../node_modules/@angular/compiler/src/util';
-
+import { FiltriService } from '../../services/filtri.service';
+import { TranslateService } from '@ngx-translate/core';
 
 
 @IonicPage()
@@ -17,10 +14,6 @@ import { ValueTransformer } from '../../../node_modules/@angular/compiler/src/ut
   templateUrl: 'filtri.html',
 })
 export class FiltriPage {
-
-  data1: Observable<any>;
-  data2: Observable<any>;
-  data3: Observable<any>;
 
   countries: Paese[];
   categories: Categoria[];
@@ -33,18 +26,17 @@ export class FiltriPage {
   currentCountry: Paese;
   currentCategory: Categoria;
   currentMaterials: Materiale[];
-  currentCountryID: string;
-  currentCategoryID: string;
-  currentMaterialsID: string[];
+  currentCountryID: number;
+  currentCategoryID: number;
+  currentMaterialsID: number[];
   allMaterialsSelected: boolean;
-
-  currentMaterial: string;
 
   priceRange: number;
   prezzoMin: number;
   prezzoMax: number;
 
-  constructor(public navCtrl: NavController, public navParams: NavParams, public httpClient: HttpClient, public events: Events) {
+  materialiSelectPlaceholder : string;
+  constructor(public navCtrl: NavController, public navParams: NavParams, public events: Events, public filtriService : FiltriService, public translateService : TranslateService) {
     this.previousCountry = this.navParams.get("country");
     this.previousCategory = this.navParams.get("category");
     this.previousMaterials = this.navParams.get("materials");
@@ -84,47 +76,49 @@ export class FiltriPage {
 
     this.currentCountryID = this.previousCountry.id;
     this.currentCategoryID = this.previousCategory.id;
-    this.currentMaterialsID = [];
-    this.allMaterialsSelected = this.navParams.get("allMaterialsSelected");
-    
-    this.countries = [];
-    this.countries.unshift(new Paese("0", ""));
-    this.data1 = this.httpClient.get<any>("https://jsonplaceholder.typicode.com/users");
-    this.data1.subscribe(countriesData => {
-      for (let country of countriesData) {
-        this.countries.unshift(new Paese(country.id, country.name));
-       }
-      this.countries.sort(this.compareCountriesByName);
-    })
-    
-    this.categories = [];
-    this.categories.unshift(new Categoria("0", ""));
-    this.data2 = this.httpClient.get<any>("https://jsonplaceholder.typicode.com/users");
-    this.data2.subscribe(categoriesData => {
-      for (let category of categoriesData) {
-        this.categories.unshift(new Categoria(category.id, category.name));
-       }
-       this.categories.sort(this.compareCategoriesByName)
-    })
-    
-    this.materials = [];
-    if(!this.allMaterialsSelected){
-      for(let startingMaterial of this.previousMaterials){
-        this.currentMaterialsID.push(startingMaterial.id);
-      }
+    this.currentMaterialsID = []
+    for(let i = 0; i < this.previousMaterials.length; i++){
+      this.currentMaterialsID.push(this.previousMaterials[i].id);
     }
-    this.data3 = this.httpClient.get<any>("https://jsonplaceholder.typicode.com/users");
-    this.data3.subscribe(materialsData => {
-      for (let material of materialsData) {
-        this.materials.unshift(new Materiale(material.id, material.name));
-       }
-       this.materials.sort(this.compareMaterialsByName)
-    })
-
+    this.allMaterialsSelected = this.navParams.get("allMaterialsSelected");
+    if(this.allMaterialsSelected){
+      this.translateService.get("PLACEHOLDER_TUTTI_MATERIALI").subscribe(
+        (translation) => {
+          this.materialiSelectPlaceholder = translation;
+        }
+      );
+    } else {
+      this.translateService.get("PLACEHOLDER_SELEZIONA_MATERIALI").subscribe(
+        (translation) => {
+          this.materialiSelectPlaceholder = translation;
+        }
+      );
+    }
+    this.countries = filtriService.getPaesi();
+    
+    this.categories = filtriService.getCategorie();
+    
+    this.materials = filtriService.getMateriali();
   }
 
-  ionViewDidLoad() {
-    console.log('ionViewDidLoad FiltriPage');
+  toggleMaterialsSelected(){
+    if(this.allMaterialsSelected){
+      this.translateService.get("PLACEHOLDER_TUTTI_MATERIALI").subscribe(
+        (translation) => {
+          this.materialiSelectPlaceholder = translation;
+        }
+      );
+    } else {
+      this.translateService.get("PLACEHOLDER_SELEZIONA_MATERIALI").subscribe(
+        (translation) => {
+          this.materialiSelectPlaceholder = translation;
+        }
+      );
+    }
+  }
+
+  getCurrentLang() : string {
+    return this.translateService.currentLang;
   }
 
   compareCountriesByName(item1: Paese, item2: Paese): number {

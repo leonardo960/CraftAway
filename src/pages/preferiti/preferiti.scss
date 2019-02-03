@@ -1,3 +1,101 @@
 page-preferiti {
-
+    ion-content{
+        .scroll-content {
+            overflow-y: auto !important;
+         }
+        ion-list{
+            ion-item{
+                background: none !important;
+                ion-card:not(.img-card){
+                    background: none !important;
+                }
+                .item-inner {
+                    padding: 0 !important;
+                }
+                .outer-card{
+                    margin: 10px !important;
+                    width: calc(100%-20px) !important;
+                    box-shadow: none !important;
+                    border-bottom: 2.5px dotted orange !important;
+                    ion-card-header{
+                        padding: 10px !important;
+                        padding-right: 0 !important;
+                        width: 80% !important;
+                        float: left !important;
+                    }
+                    ion-card-content{
+                        padding: 0 !important;
+                        margin-top: 10px !important;
+                        margin-bottom: 10px !important;
+                        padding-right: 10px !important;
+                        width: 20% !important;
+                        height: 10vh !important;
+                        float: left !important;
+                        button{
+                            float: right !important;
+                            bottom: 0 !important;
+                            right: 0 !important;
+                            margin-top: 26px !important;
+                            margin-right: -10px !important;
+                            background: none !important;
+                            color: orange !important;
+                            box-shadow: none !important;
+                        }
+                    }
+                    .inner-card{
+                        float:left !important;
+                        margin: 0 !important;
+                        width: 70% !important;
+                        box-shadow: none !important;
+                        margin-left: 10px !important;
+                        h1{
+                            font-size: 16px !important;
+                        }
+                        p{
+                            font-size: 12px !important;
+                        }
+                    }
+                    .img-card{
+                        float:left !important;
+                        width: 10vh !important;
+                        height: 10vh !important;
+                        box-shadow: none !important;
+                        border-radius: 0 !important;
+                        margin: 0 !important;
+                        background-position: center !important;
+                        background-size: contain !important;
+                    }
+                }
+                padding: 0 !important;
+                
+                ion-label{
+                    margin: 0 !important;
+                }
+                button{
+                    margin: 0 !important;
+                }
+            }
+        }
+    }
+    #no-preferiti-message{
+        text-align: center !important;
+        font-size: 16px !important;
+        position: absolute !important;
+        top: 47vh !important;
+        background: none !important;
+    }
+    .img-card-no-preferiti{
+        position: absolute !important;
+        top: 15vh !important;
+        left: 13.5vh !important;
+        width: 30vh !important;
+        height: 30vh !important;
+        box-shadow: none !important;
+        margin: 0 !important;
+        background-position: center !important;
+        background-size: contain !important;
+        background-image: url("../../assets/imgs/craftaway_no_content.png") !important;
+        background-color: transparent !important;
+    }
 }
+

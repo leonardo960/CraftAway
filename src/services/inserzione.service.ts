@@ -10,7 +10,7 @@ export class InserzioneService {
     }
 
     getYourInserzioni(){
-      return this.http.get<Inserzione[]>(URL.INSERZIONI);
+      return this.http.get<any>(URL.INSERZIONI);
     }
 
     publishInserzione(inserzione : Inserzione){
@@ -18,8 +18,7 @@ export class InserzioneService {
     }
 
     getDettaglioInserzione(idInserzione: string){
-      let headers : HttpHeaders = new HttpHeaders({"idInserzione" : idInserzione});
-      return this.http.get<Inserzione>(URL.INSERZIONI_DETTAGLIO, {headers: headers});
+      return this.http.get<Inserzione>(URL.INSERZIONI_DETTAGLIO, {params : {"idInserzione" : idInserzione}});
     }
 
     deleteInserzione(idInserzione: string){
@@ -36,24 +35,14 @@ export class InserzioneService {
       return this.http.get<Inserzione[]>(URL.INSERZIONI_PER_UTENTE, {headers: headers});
     }
     
-    searchInserzioni(ricerca: Ricerca){
-      let headers : HttpHeaders = new HttpHeaders();
-      //Qua ricerca non me lo invia tramite get, da rivedere, deve essere stringa in teoria
-      return this.http.get<Inserzione[]>(URL.INSERZIONI_RICERCA);
+    searchInserzioni(ricerca: Ricerca = null){
+      if(ricerca == null){
+        ricerca = new Ricerca("", {"id":0, "nome":"", "nome_inglese":""}, {"id":0, "nome":"", "nome_inglese":""}, [], -1, -1);
+        return this.http.post<Inserzione[]>(URL.INSERZIONI_RICERCA, ricerca, {headers: {"Content-type": "application/json; charset=UTF-8"}});
+      } else {
+        return this.http.post<Inserzione[]>(URL.INSERZIONI_RICERCA, ricerca, {headers: {"Content-type": "application/json; charset=UTF-8"}});
+      }
     }
 
-    getPreferiti(){
-      return this.http.get<Inserzione[]>(URL.PREFERITI);
-    }
-
-    deletePreferito(idInserzione :string){
-      let headers : HttpHeaders = new HttpHeaders({"idInserzione" : idInserzione});
-      return this.http.delete<any>(URL.PREFERITI, {headers: headers})
-    }
-
-    addPreferito(idInserzione: string){
-      let headers : HttpHeaders = new HttpHeaders({"idInserzione" : idInserzione});
-      return this.http.post<any>(URL.PREFERITI, {headers: headers})
-    }
-
+    
 }

@@ -1,3 +1,73 @@
 page-ricerche {
+    ::-webkit-scrollbar,
+    *::-webkit-scrollbar {
+        display: none;
+    }
+    ion-content{
+        .scroll-content {
+            overflow-y: auto !important;
+         }
+         ion-card{
+            width: calc(100%-20px) !important;
+            margin: 10px !important;
+            box-shadow: 1px 1px 5px gray !important;
+            button{
+                position: absolute !important;
+                right: 10px !important;
+                bottom: 10px !important;
+                color: orange !important;
+                background: none !important;
+                box-shadow: none !important;
+            }
+            p a{
+                color: black !important;
+                
+            }
+        }
+        ion-label{
+            margin: 0 !important;
+        }
+        ion-item{
+            background: none !important;
+            padding: 0 !important;
+            .item-inner{
+                padding: 0 !important;
+            }
+        }
+        .materiali{
+            display: inline-block !important;
+            margin-right: 5px !important;
+            margin-bottom:  5px !important;
+            p{
+            padding: 5px !important;
+            border-radius: 5px !important;
+            background: orange !important;
+            }
+        }
+        #prezzo{
+            margin-top: 12px !important;
+        }
+    }
+    #no-preferiti-message{
+        text-align: center !important;
+        font-size: 16px !important;
+        position: absolute !important;
+        top: 47vh !important;
+        background: none !important;
+    }
+    .img-card-no-preferiti{
+        position: absolute !important;
+        top: 15vh !important;
+        left: 13.5vh !important;
+        width: 30vh !important;
+        height: 30vh !important;
+        box-shadow: none !important;
+        margin: 0 !important;
+        background-position: center !important;
+        background-size: contain !important;
+        background-image: url("../../assets/imgs/craftaway_no_content.png");
+        background-color: transparent !important;
 
+    }
+    
 }

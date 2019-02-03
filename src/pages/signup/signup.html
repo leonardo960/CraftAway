@@ -7,38 +7,32 @@
 <ion-header>
 
   <ion-navbar>
-    <ion-title>Registrazione</ion-title>
+    <ion-title>{{"GUI_REGISTRAZIONE" | translate}}</ion-title>
   </ion-navbar>
 
-  <ion-label style="font-weight: bold; font-size: 3.5vh; margin-left: 2vh; margin-bottom: 0vh;">Crea gratis la tua area riservata!</ion-label>
-  <ion-label style="font-size: 2.5vh; margin-left: 2vh; margin-top: 0vh;">Gestisci con facilità le tue inserzioni</ion-label>
+  <ion-label style="font-weight: bold; margin-left: 2vh; margin-bottom: 0vh;">{{"GUI_REGISTRAZIONE_TITLE" | translate}}</ion-label>
+  <ion-label style="margin-left: 2vh; margin-top: 0vh; color: gray;">{{"GUI_REGISTRAZIONE_SUBTITLE" | translate}}</ion-label>
 </ion-header>
 
 
 <ion-content padding>
   <ion-item>
-    <ion-label stacked>Nome</ion-label>
-    <ion-input [(ngModel)]="nome" type="text" placeholder="Inserisci nome"></ion-input>
+    <ion-label stacked>{{"GUI_NICKNAME" | translate}}</ion-label>
+    <ion-input [(ngModel)]="nome" type="text" placeholder="{{'PLACEHOLDER_INSERISCI_NICKNAME' | translate}}"></ion-input>
   </ion-item>  
   
   <ion-item>
-        <ion-label stacked>Email</ion-label>
-        <ion-input [(ngModel)]="email" type="email" placeholder="Inserisci email"></ion-input>
+        <ion-label stacked>{{"GUI_EMAIL" | translate}}</ion-label>
+        <ion-input [(ngModel)]="email" type="email" placeholder="{{'PLACEHOLDER_INSERISCI_EMAIL' | translate}}"></ion-input>
   </ion-item>
     
     
 
   <ion-item style="margin-bottom: 2vh;">
-    <ion-label color="primary" stacked>Password</ion-label>
-    <ion-input [(ngModel)]="password" type="password" placeholder="Inserisci password"></ion-input>
+    <ion-label stacked>{{"GUI_PASSWORD" | translate}}</ion-label>
+    <ion-input [(ngModel)]="password" type="password" placeholder="{{'PLACEHOLDER_INSERISCI_PASSWORD' | translate}}"></ion-input>
   </ion-item>
-  <ion-item>
-    <ion-label stacked>Paese</ion-label>
-      <ion-select placeholder="Seleziona" [(ngModel)]="paeseId">
-        <ion-option value="1">Italia</ion-option>
-        <ion-option value="2">Spagna</ion-option>
-      </ion-select>
-  </ion-item>
+  
 
-    <button ion-button (click)="signup()" style="width: 100%; margin-top: 4vh;">Invia</button>
+    <button ion-button (click)="signup()" style="width: 100%; margin-top: 4vh;">{{"GUI_INVIA" | translate}}</button>
 </ion-content>

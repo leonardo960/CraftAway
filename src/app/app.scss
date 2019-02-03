@@ -14,3 +14,73 @@
 // To declare rules for a specific mode, create a child rule
 // for the .md, .ios, or .wp mode classes. The mode class is
 // automatically applied to the <body> element in the app.
+
+.login-buttons{
+
+    button{
+        width: calc(50% - 10px) !important;
+        float: left !important;
+        text-align: center !important;
+        margin: 5px !important;
+        background: none !important;
+        box-shadow: none !important;
+        color: white !important;
+    }
+}
+::-webkit-scrollbar,
+    *::-webkit-scrollbar {
+        display: none;
+    }
+.menu-list{
+    button{
+        background: none !important;
+        color: black !important;
+    }
+}
+.menu-footer{
+    button{
+        background: orange !important;
+    }
+}
+.menu-header{
+    background: orange !important;
+}
+
+
+.toolbar-background{
+    background: orange !important;
+}
+ion-fab{
+    button{
+        background: orange !important;
+    }
+    ion-icon{
+        color: white !important;
+    }
+}
+ion-content{
+    background: rgb(255, 234, 195) !important;
+}
+.alert-wrapper{
+    background: rgb(255, 234, 195) !important;
+}
+
+ion-footer{
+    button{
+        background: orange !important;
+        color: white !important;
+    }
+}
+
+#logo-card{
+    background: url("../assets/imgs/CraftAway_Logo.png");
+    height: 20vh !important;
+    width: 20vh !important;
+    box-shadow: none !important;
+    background-size: contain !important;
+    background-position: center !important;
+    margin-left: calc(50% - 10vh) !important;
+    margin-top: 15px !important;
+}
+
+

@@ -20,22 +20,53 @@ import { UtenteService } from "../../services/utente.service";
 })
 
 export class MessaggiPage {
-  conversazioni: Conversazione[];
-
+  conversazioni: Conversazione[] = [];
+  conversazioniLoaded : boolean = false;
   constructor(public utenteService: UtenteService, public navCtrl: NavController, public navParams: NavParams, public chatService: ChatService) {
     chatService.getConversations().subscribe(
       (conversazioni) => {
-        this.conversazioni = conversazioni;
+          for(let i = 0; i < conversazioni.length; i++){
+            let ultimoMessaggio = new Messaggio(conversazioni[i].id, conversazioni[i].messaggi[0].mittente as Utente, conversazioni[i].messaggi[0].destinatario as Utente, new Date(conversazioni[i].messaggi[0].timestamp as number), conversazioni[i].messaggi[0].testo);
+            if(conversazioni[i].utente1.email == utenteService.getUtenteLoggato().email){
+              this.conversazioni.push(new Conversazione(conversazioni[i].id, utenteService.getUtenteLoggato(), conversazioni[i].utente2 as Utente, [ultimoMessaggio]));
+            } else {
+              this.conversazioni.push(new Conversazione(conversazioni[i].id, utenteService.getUtenteLoggato(), conversazioni[i].utente1 as Utente, [ultimoMessaggio]));
+            }
+          }
+          this.conversazioniLoaded = true;
       },
       (err) => {
         console.log(err);
       }
-    )
+    );
   }
 
   ionViewDidLoad() {
     console.log('ionViewDidLoad MessaggiPage');
   }
+
+  ionViewWillEnter(){
+    if(this.conversazioniLoaded){
+      this.conversazioni = [];
+      this.chatService.getConversations().subscribe(
+        (conversazioni) => {
+            for(let i = 0; i < conversazioni.length; i++){
+              let ultimoMessaggio = new Messaggio(conversazioni[i].id, conversazioni[i].messaggi[0].mittente as Utente, conversazioni[i].messaggi[0].destinatario as Utente, new Date(conversazioni[i].messaggi[0].timestamp as number), conversazioni[i].messaggi[0].testo);
+              if(conversazioni[i].utente1.email == this.utenteService.getUtenteLoggato().email){
+                this.conversazioni.push(new Conversazione(conversazioni[i].id, this.utenteService.getUtenteLoggato(), conversazioni[i].utente2 as Utente, [ultimoMessaggio]));
+              } else {
+                this.conversazioni.push(new Conversazione(conversazioni[i].id, this.utenteService.getUtenteLoggato(), conversazioni[i].utente1 as Utente, [ultimoMessaggio]));
+              }
+            }
+        },
+        (err) => {
+          console.log(err);
+        }
+      );
+    }
+    
+  }
+
 
   conversazioneTapped(idConversazione){
     this.navCtrl.push(CHAT_PAGE, {"idConversazione": idConversazione});

@@ -1,7 +1,9 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams } from 'ionic-angular';
+import { IonicPage, NavController, NavParams, App, Events } from 'ionic-angular';
 import { Inserzione } from '../../model/inserzione';
-import { Utente } from '../../model/utente';
+import { UtenteService } from '../../services/utente.service';
+import { DETTAGLIO_INSERZIONE_PAGE } from '../pages';
+import { TranslateService } from '@ngx-translate/core';
 
 /**
  * Generated class for the PreferitiPage page.
@@ -16,24 +18,59 @@ import { Utente } from '../../model/utente';
   templateUrl: 'preferiti.html',
 })
 export class PreferitiPage {
-  preferiti : Inserzione[];
-  constructor(public navCtrl: NavController, public navParams: NavParams) {
-    let utente = new Utente("Utente", "utente@email.com", "password", new Date(), 1, 1, {}, []);
-    let inserzione1 = new Inserzione(["img1"], "Cuccioli di Dumbo", 50, new Date(), {id: "1", nome: "Italia"}, "1", "Cuccioli di Dumbo freschi da sgranocchiare!", {id: "1", nome: "Snack"}, [], utente);
-    let inserzione2 = new Inserzione(["img2"], "Spade da guerra medievali assortite", 125, new Date(), {id: "2", nome: "Polonia"}, "2", "La descrizione neanche si legge da qua...", {id: "2", nome: "Armi"}, [], utente);
-    this.preferiti = [inserzione1, inserzione2];
+  preferiti : Inserzione[] = [];
+  constructor(public app: App, public navCtrl: NavController, public navParams: NavParams, public utenteService : UtenteService, public translateService : TranslateService, public events : Events) {
+    this.utenteService.getInserzioniPreferite().subscribe(
+      (preferiti) => {
+        for(let preferito of preferiti){
+          preferito.dataPubblicazione = new Date(preferito.dataPubblicazione as number);
+        }
+        this.preferiti = preferiti;
+      },
+      (err) => {
+        //error handling
+      }
+    );
+    events.subscribe("refreshPreferiti", () => {
+      this.utenteService.getInserzioniPreferite().subscribe(
+        (preferiti) => {
+          for(let preferito of preferiti){
+            preferito.dataPubblicazione = new Date(preferito.dataPubblicazione as number);
+          }
+          this.preferiti = preferiti;
+        },
+        (err) => {
+          //error handling
+        }
+      );
+    });
   }
 
-  ionViewDidLoad() {
-    console.log('ionViewDidLoad PreferitiPage');
+
+
+  getCurrentLang() : string{
+    return this.translateService.currentLang;
   }
 
   preferitoTapped(idPreferito : number){
-    //this.navCtrl.push(DETTAGLIO_INSERZIONE, {"idInserzione" : idPreferito});
+    this.app.getRootNav().push(DETTAGLIO_INSERZIONE_PAGE, {"idInserzione" : idPreferito});
   }
 
   eliminaPreferito(idPreferito : number){
-    //manda la richiesta al server e poi eliminalo anche client-side da preferiti;
+    this.utenteService.deleteInserzionePreferita(idPreferito).subscribe(
+      (ok) => {
+        //mostra alert
+        for(let i = 0; i < this.preferiti.length; i++){
+          if(this.preferiti[i].id == idPreferito.toString()){
+            this.preferiti.splice(i, 1);
+            break;
+          }
+        }
+      },
+      (err) => {
+        //mostra alert
+      }
+    );
   }
 
 }
