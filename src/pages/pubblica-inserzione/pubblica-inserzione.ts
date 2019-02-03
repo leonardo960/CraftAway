@@ -19,6 +19,7 @@ import { UtenteService } from '../../services/utente.service';
 @Component({
   selector: 'page-pubblica-inserzione',
   templateUrl: 'pubblica-inserzione.html',
+  providers: [InserzioneService, FiltriService, UtenteService]
 })
 export class PubblicaInserzionePage {
   categorie: Categoria[];
@@ -29,11 +30,18 @@ export class PubblicaInserzionePage {
 
   dataPubblicazione: Date; //la classe built-in per le date di Typescript è "Date"
   id: string; //(eventualmente codificato con qualcosa tipo base64)
-
+  titolo: string;
+  prezzo: number;
+  descrizione: string;
+  categoria: Categoria;
+  materialiSelezionati: Materiale[];
+  paese: Paese;
   constructor(public navCtrl: NavController, public navParams: NavParams, public filtriService: FiltriService, public inserzioneService: InserzioneService, public utenteService: UtenteService) {
-    // this.categorie = filtriService.categorie;
-    // this.materiali = filtriService.materiali;
-    // this.paesi = filtriService.paesi;
+    //Non so perchè non parte da solo su pc mio l'ngOnInit
+    this.filtriService.ngOnInit();
+    this.categorie = filtriService.categorie;
+    this.materiali = filtriService.materiali;
+    this.paesi = filtriService.paesi;
   }
 
   ionViewDidLoad() {
@@ -41,18 +49,20 @@ export class PubblicaInserzionePage {
   }
 
   pubblica() {
-    //Ricavare i valori delle variabili
-    let titolo = "";
-    let prezzo = 0;
-    let descrizione = "";
-    let categoria = this.categorie[0];
-    let materialiSelezionati;
-    let paese = this.paesi[0];
+    //Da rimuovere ma sul pc mio è buggato
+    this.categorie = this.filtriService.categorie;
+    this.materiali = this.filtriService.materiali;
+    this.paesi = this.filtriService.paesi;
+    ///
+
     let utente = this.utenteService.getUtenteLoggato();
     let data = new Date();
     let id = "";
 
-    let inserzione: Inserzione = new Inserzione(this.immagini, titolo, prezzo, data, paese, id, descrizione, categoria, materialiSelezionati, utente)
+    let inserzione: Inserzione = new Inserzione(this.immagini, this.titolo, this.prezzo, data,this. paese, id, this.descrizione, this.categoria, this.materialiSelezionati, utente)
+
+    console.log(inserzione);
+    console.log(this.categoria.nome);
     this.inserzioneService.publishInserzione(inserzione);
   }
 
