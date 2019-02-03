@@ -12,17 +12,51 @@
 
 </ion-header>
 
+IMMAGINI
 
 <ion-content padding>
-  <ion-slides pager="true" [options]="slideOpts">
+  <ion-slides pager="true">
     <ion-slide>
-      <h1>Pubblica inserzione</h1>
+      <ion-list>
+        <ion-item>
+          <ion-label>Categoria</ion-label>
+          <ion-select [(ngModel)]="categoria" placeholder="Select One" ngDefaultControl>
+            <ion-option *ngFor="let categoria of categorie" value="{{categoria}}">{{categoria.nome}}</ion-option>
+          </ion-select>
+        </ion-item>
+        <ion-item>
+          <ion-label>Materiali</ion-label>
+          <ion-select [(ngModel)]="materialiSelezionati" multiple="true" placeholder="Select Some" ngDefaultControl>
+            <ion-option *ngFor="let materiale of materiali" value="{{materiale}}">{{materiale.nome}}</ion-option>
+          </ion-select>
+        </ion-item>
+        <ion-item>
+          <ion-label>Paese</ion-label>
+          <ion-select [(ngModel)]="paese" placeholder="Select One" ngDefaultControl>
+            <ion-option *ngFor="let paese of paesi" value="{{paese}}">{{paese.nome}}</ion-option>
+          </ion-select>
+        </ion-item>
+      </ion-list>
     </ion-slide>
     <ion-slide>
-      <h1>Pubblica inserzione</h1>
-    </ion-slide>
-    <ion-slide>
-      <h1>Pubblica Cersei Lannister</h1>
+      <ion-list>
+        <ion-item>
+          <ion-label>Titolo</ion-label>
+          <ion-input [(ngModel)]="titolo" placeholder="inserisci qui il titolo" ngDefaultControl></ion-input>
+        </ion-item>
+        <ion-item>
+          <ion-label>Descrizione</ion-label>
+          <ion-input [(ngModel)]="descrizione"placeholder="inserisci qui la descrizione"  ngDefaultControl></ion-input>
+        </ion-item>
+        <ion-item>
+          <ion-label  >Prezzo</ion-label>
+          <ion-input [(ngModel)]="prezzo" type="number" placeholder="0" ngDefaultControl></ion-input>
+        </ion-item>
+
+        <ion-item>
+          <button (click)="pubblica()" color="primary">Pubblica</button>
+        </ion-item>
+      </ion-list>
     </ion-slide>
   </ion-slides>
 </ion-content>
