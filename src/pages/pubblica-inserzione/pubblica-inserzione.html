@@ -12,17 +12,68 @@
 
 </ion-header>
 
+CATEGORIA+
+MATERIALI+
+IMMAGINI
+----------
+TESTO+
+PREZZO+
+PAESE+
+-----------
+
 
 <ion-content padding>
-  <ion-slides pager="true" [options]="slideOpts">
+  <ion-slides pager="true">
     <ion-slide>
-      <h1>Pubblica inserzione</h1>
+      <ion-list>
+        <ion-item>
+          <ion-label>Categoria</ion-label>
+          <ion-select placeholder="Select One">
+            <ion-option *ngFor="let categoria of categorie" value="{{categoria.id}}">{{categoria.nome}}</ion-option>
+          </ion-select>
+        </ion-item>
+
+        <ion-item>
+          <ion-label>Materiali</ion-label>
+          <ion-select placeholder="Select One">
+            <ion-option *ngFor="let materiale of materiali" value="{{materiale}}">{{materiale}}</ion-option>
+          </ion-select>
+        </ion-item>
+
+        <ion-item>
+          <ion-label>Password</ion-label>
+          <ion-input type="{{passInputType}}" [(ngModel)]="password"></ion-input>
+        </ion-item>
+        <button (click)="showPassword()">
+          <ion-icon name="{{showingIcon}}"></ion-icon>
+        </button>
+
+      </ion-list>
     </ion-slide>
     <ion-slide>
-      <h1>Pubblica inserzione</h1>
-    </ion-slide>
-    <ion-slide>
-      <h1>Pubblica Cersei Lannister</h1>
+      <ion-list>
+          <ion-item>
+              <ion-label>Titolo</ion-label>
+              <ion-input placeholder="inserisci qui il titolo"></ion-input>
+            </ion-item>
+        <ion-item>
+          <ion-label>Descrizione</ion-label>
+          <ion-input placeholder="inserisci qui la descrizione"></ion-input>
+        </ion-item>
+        <ion-item>
+          <ion-label>Prezzo</ion-label>
+          <ion-input type="number" palceholder="0"></ion-input>
+        </ion-item>
+        <ion-item>
+          <ion-label>Paese</ion-label>
+          <ion-select placeholder="Select One">
+            <ion-option *ngFor="let paese of paesi" value="{{paese}}">{{paese}}</ion-option>
+          </ion-select>
+        </ion-item>
+        <ion-item>
+          <ion-button (click)="pubblica()" color="primary">Pubblica</ion-button>
+        </ion-item>
+      </ion-list>
     </ion-slide>
   </ion-slides>
 </ion-content>
