@@ -21,19 +21,19 @@ IMMAGINI
         <ion-item>
           <ion-label>Categoria</ion-label>
           <ion-select [(ngModel)]="categoria" placeholder="Select One" ngDefaultControl>
-            <ion-option *ngFor="let categoria of categorie" value="{{categoria}}">{{categoria.nome}}</ion-option>
+            <ion-option *ngFor="let categoria of categorie" [value]="categoria">{{categoria.nome}}</ion-option>
           </ion-select>
         </ion-item>
         <ion-item>
           <ion-label>Materiali</ion-label>
           <ion-select [(ngModel)]="materialiSelezionati" multiple="true" placeholder="Select Some" ngDefaultControl>
-            <ion-option *ngFor="let materiale of materiali" value="{{materiale}}">{{materiale.nome}}</ion-option>
+            <ion-option *ngFor="let materiale of materiali" [value]="materiale">{{materiale.nome}}</ion-option>
           </ion-select>
         </ion-item>
         <ion-item>
           <ion-label>Paese</ion-label>
           <ion-select [(ngModel)]="paese" placeholder="Select One" ngDefaultControl>
-            <ion-option *ngFor="let paese of paesi" value="{{paese}}">{{paese.nome}}</ion-option>
+            <ion-option *ngFor="let paese of paesi" [value]="paese">{{paese.nome}}</ion-option>
           </ion-select>
         </ion-item>
       </ion-list>
@@ -55,6 +55,12 @@ IMMAGINI
 
         <ion-item>
           <button (click)="pubblica()" color="primary">Pubblica</button>
+        </ion-item>
+        <ion-item>
+          <button (click)="aggiorna()" color="primary">Aggiorna (da cancellare)</button>
+        </ion-item>
+        <ion-item>
+          <button (click)="aggiungiImmagine(0)" color="primary">Carica immagine</button>
         </ion-item>
       </ion-list>
     </ion-slide>
