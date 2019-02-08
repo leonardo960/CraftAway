@@ -42,7 +42,7 @@ export class HomePage {
   currentSort: SortType;
   currentSearch: Ricerca;
 
-  constructor(public navCtrl: NavController, public httpClient: HttpClient, public modalCtrl: ModalController, public popCtrl: PopoverController, public events: Events, private storage: Storage, public ricercaService: RicercaService, public inserzioneService : InserzioneService, public translateService : TranslateService, public filtriService : FiltriService) {
+  constructor(public navCtrl: NavController, public httpClient: HttpClient, public modalCtrl: ModalController, public popCtrl: PopoverController, public events: Events, private storage: Storage, public ricercaService: RicercaService, public inserzioneService : InserzioneService, public translateService : TranslateService, public filtriService : FiltriService, public alertController : AlertController) {
     this.paeseBase = new Paese(0, "Tutta l'Europa", "Whole Europe")
     this.categoriaBase = new Categoria(0, "Tutte le Categorie", "All Categories");
     inserzioneService.searchInserzioni().subscribe(
@@ -52,12 +52,14 @@ export class HomePage {
         this.sortInserzioni();
       },
       (err) => {
-        //alert error
+        this.showSearchError();
       }
     );
     this.resetFilters();
 
     this.updateCurrentSearch();
+
+   
 
     events.subscribe('filters:applied', (allMaterialsSelected, newCountry, newCategory, newMaterials, newMinPrice, newMaxPrice) => {
       this.allMaterialsSelected = allMaterialsSelected;
@@ -72,7 +74,7 @@ export class HomePage {
           this.inserzioni = risultati;
         },
         (err) => {
-          //error handling
+          this.showSearchError();
         }
       );
     });
@@ -98,12 +100,20 @@ export class HomePage {
           this.inserzioni = risultati;
         },
         (err) => {
-          //error handling
+          this.showSearchError();
         }
       );
     });
     
 
+  }
+
+  showSearchError(){
+    this.alertController.create({
+      title: "Oh no!",
+      message: "Si è verificato un errore durante la ricerca. Riprova più tardi!",
+      buttons : ["Capito"]
+    }).present();
   }
 
   getCurrentLang() : string{
@@ -124,7 +134,7 @@ export class HomePage {
         this.inserzioni = risultati;
       },
       (err) => {
-        //error handling
+        this.showSearchError();
       }
     );
   }
@@ -151,7 +161,7 @@ export class HomePage {
         this.inserzioni = risultati;
       },
       (err) => {
-        //error handling
+        this.showSearchError();
       }
     );
   }

@@ -26,6 +26,7 @@ export class RicerchePage {
     )
   }
 
+
   ionViewDidLoad() {
     console.log('ionViewDidLoad RicerchePage');
   }

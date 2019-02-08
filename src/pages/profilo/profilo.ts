@@ -19,7 +19,7 @@ export class ProfiloPage {
   showingIcon: string;
   passInputType: string;
 
-  constructor(public navCtrl: NavController, public popCtrl: PopoverController, public navParams: NavParams, public utenteService: UtenteService, public events : Events, public translateService : TranslateService, public storage : Storage) {
+  constructor(public navCtrl: NavController, public popCtrl: PopoverController, public navParams: NavParams, public utenteService: UtenteService, public events : Events, public translateService : TranslateService, public storage : Storage, public alertController : AlertController) {
     this.utente = this.utenteService.getUtenteLoggato();
     this.nomeUtente = this.utente.nome;
     this.email = this.utente.email;
@@ -59,10 +59,22 @@ export class ProfiloPage {
     this.utenteService.modifyProfile(this.utente).subscribe(
       (ok) => {
         this.navCtrl.pop();
+      },
+      (err) => {
+        this.showModifyProfiloError();
       }
     );
   }
 
+  showModifyProfiloError(){
+    this.alertController.create({
+      title: "Oh no!",
+      message: "Si è verificato un errore nella modifica dei dati del profilo. Riprova più tardi!",
+      buttons : [{
+        text: "Capito"
+      }]
+    }).present();
+  }
 
   ionViewDidLoad() {
     console.log('ionViewDidLoad ProfiloPage');

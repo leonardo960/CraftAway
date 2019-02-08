@@ -1,5 +1,5 @@
 import { Component, ViewChild } from '@angular/core';
-import { IonicPage, NavController, NavParams, Content } from 'ionic-angular';
+import { IonicPage, NavController, NavParams, Content, AlertController } from 'ionic-angular';
 import { Messaggio } from "../../model/messaggio";
 import { ChatService } from "../../services/chat.service";
 import { UtenteService } from "../../services/utente.service";
@@ -23,7 +23,7 @@ export class ChatPage {
   altroUtente : Utente = new Utente("", "", "", new Date(), 0, 0, []);
   @ViewChild(Content) content: Content;
 
-  constructor(public navCtrl: NavController, public navParams: NavParams, public chatService: ChatService, public utenteService: UtenteService) {
+  constructor(public navCtrl: NavController, public navParams: NavParams, public chatService: ChatService, public utenteService: UtenteService, public alertController : AlertController) {
     this.idConversazione = navParams.get('idConversazione');
     chatService.getChat(this.idConversazione, 0, 1000).subscribe(
       (messaggi) => {
@@ -38,8 +38,7 @@ export class ChatPage {
         this.checkNewMessages();
       },
       (err) => {
-        //error handling
-        console.log(JSON.stringify(err));
+        this.showChatError();
       }
     );
     
@@ -49,6 +48,18 @@ export class ChatPage {
 
   }
 
+  showChatError(){
+    this.alertController.create({
+      title: "Oh no!",
+      message: "Si è verificato un errore durante il recupero dei messaggi. Riprova più tardi!",
+      buttons : [{
+        text: "Capito",
+        handler : () => {
+          this.navCtrl.pop();
+        }
+      }]
+    }).present();
+  }
 
 
   checkNewMessages() {
@@ -81,9 +92,19 @@ export class ChatPage {
         this.inputMessaggio = "";
       },
       (err) => {
-        console.log(err);
+        this.showSendMessageError();
       }
     )
+  }
+
+  showSendMessageError(){
+    this.alertController.create({
+      title: "Oh no!",
+      message: "Si è verificato un errore durante l'invio del messaggio. Riprova più tardi!",
+      buttons : [{
+        text: "Capito"
+      }]
+    }).present();
   }
 
 

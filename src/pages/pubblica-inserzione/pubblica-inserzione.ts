@@ -1,13 +1,15 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams } from 'ionic-angular';
+import { IonicPage, NavController, NavParams, ModalController, Events, ViewController, AlertController } from 'ionic-angular';
 import { Inserzione } from '../../model/inserzione';
 import { FiltriService } from '../../services/filtri.service';
-import { Categoria } from '../../model/categoria';
-import { Materiale } from '../../model/materiale';
-import { Paese } from '../../model/paese';
 import { InserzioneService } from '../../services/inserzione.service';
 import { UtenteService } from '../../services/utente.service';
-
+import { Categoria } from '../../model/categoria';
+import { Paese } from '../../model/paese';
+import { Materiale } from '../../model/materiale';
+import { TranslateService } from '@ngx-translate/core';
+import { Camera, CameraOptions } from '@ionic-native/camera';
+import { SelezioneImmagini } from './selezione-immagini';
 /**
  * Generated class for the PubblicaInserzionePage page.
  *
@@ -18,33 +20,20 @@ import { UtenteService } from '../../services/utente.service';
 @IonicPage()
 @Component({
   selector: 'page-pubblica-inserzione',
-  templateUrl: 'pubblica-inserzione.html',
-  providers: [InserzioneService, FiltriService, UtenteService]
+  templateUrl: 'pubblica-inserzione.html'
 })
 export class PubblicaInserzionePage {
-  categorie: Categoria[];
-  materiali: Materiale[];
-  paesi: Paese[];
-  immagini: string[];
-  dataPubblicazione: Date; //la classe built-in per le date di Typescript è "Date"
-  id: string; //(eventualmente codificato con qualcosa tipo base64)
-  titolo: string;
-  prezzo: number;
-  descrizione: string;
-  categoria: Categoria;
-  materialiSelezionati: Materiale[];
-  paese: Paese;
-
-  
-  constructor(public navCtrl: NavController, public navParams: NavParams, public filtriService: FiltriService, public inserzioneService: InserzioneService, public utenteService: UtenteService) {
-    //Non so perchè non parte da solo su pc mio l'ngOnInit
-
+  inserzione : Inserzione;
+  categorie : Categoria[] = [];
+  paesi : Paese[] = [];
+  materiali : Materiale[] = [];
+  idMateriali : number[] = [];
+  constructor(public navCtrl: NavController, public navParams: NavParams, public filtriService: FiltriService, public inserzioneService: InserzioneService, public utenteService: UtenteService, public modalController : ModalController, public alertController : AlertController) {
+    this.inserzione = new Inserzione([], "", 0, new Date(), {id:0,nome:"",nome_inglese:""}, "", "", {id:0, nome:"", nome_inglese:""}, [], utenteService.getUtenteLoggato());
     
-
-    this.filtriService.init()
-    this.categorie = filtriService.categorie;
-    this.materiali = filtriService.materiali;
-    this.paesi = filtriService.paesi;
+    this.categorie = filtriService.getCategorie();
+    this.paesi = filtriService.getPaesi();
+    this.materiali = filtriService.getMateriali();
   }
 
   ionViewDidLoad() {
@@ -52,47 +41,49 @@ export class PubblicaInserzionePage {
   }
 
   pubblica() {
-    let utente = this.utenteService.getUtenteLoggato();
-    let data = new Date();
-    let id = "";
-
-    let inserzione: Inserzione = new Inserzione(this.immagini, this.titolo, this.prezzo, data,this. paese, id, this.descrizione, this.categoria, this.materialiSelezionati, utente)
-
-    console.log(inserzione);
-    console.log(this.categoria.nome);
-    this.inserzioneService.publishInserzione(inserzione);
+    this.inserzioneService.publishInserzione(this.inserzione).subscribe(
+      (ok) => {
+        this.showPublishSuccess();
+      },
+      (err) => {
+        this.showPublishError();
+      }
+    );
   }
 
-  aggiorna(){
-    this.filtriService.init()
-    this.categorie = this.filtriService.categorie;
-    this.materiali = this.filtriService.materiali;
-    this.paesi = this.filtriService.paesi;
+  showPublishSuccess(){
+    this.alertController.create({
+      title: "Inserzione pubblicata!",
+      message: "La tua inserzione è stata pubblicata con successo. Buona fortuna!",
+      buttons : [{
+        text: "Ok!",
+        handler: () => {
+          this.navCtrl.pop();
+        }
+      }],
+      enableBackdropDismiss: false
+    }).present();
   }
 
-  aggiungiImmagine(){
-    // const options: CameraOptions = {
-    //   quality: 100,
-    //   destinationType: this.camera.DestinationType.DATA_URL,
-    //   encodingType: this.camera.EncodingType.JPEG,
-    //   mediaType: this.camera.MediaType.PICTURE,
-    //   correctOrientation: true,
-  // }
-
-    //Mi da errore Object(...) is not a function
-    // this.camera.getPicture(options).then((imageData) => {
-    //   let base64Image = 'data:image/jpeg;base64,' + imageData;
-    // }, (err) => {
-    //   console.log("errore");
-    // });
-
-    //Pure
-  //   this.camera.getPicture(options).then(function(imageData) {
-  //     this.picture = imageData;;
-  //  }, function(err) {
-  //     console.log(err);
-  //  });
-   //Internet non mi ha aiutato molto
+  showPublishError(){
+    this.alertController.create({
+      title: "Oh no!",
+      message: "Si è verificato un errore nella pubblicazione della tua inserzione. Riprova più tardi!",
+      buttons : [{
+        text: "Capito"
+      }]
+    }).present();
   }
+
+  
+
+  modalImmagini(){
+    const modal = this.modalController.create(SelezioneImmagini, {immagini: this.inserzione.immagini});
+    modal.present();
+  }
+
+
 
 }
+
+

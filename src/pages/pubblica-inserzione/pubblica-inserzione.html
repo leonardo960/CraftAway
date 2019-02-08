@@ -12,7 +12,7 @@
 
 </ion-header>
 
-IMMAGINI
+
 
 <ion-content padding>
   <ion-slides pager="true">
@@ -20,47 +20,46 @@ IMMAGINI
       <ion-list>
         <ion-item>
           <ion-label>Categoria</ion-label>
-          <ion-select [(ngModel)]="categoria" placeholder="Select One" ngDefaultControl>
-            <ion-option *ngFor="let categoria of categorie" [value]="categoria">{{categoria.nome}}</ion-option>
+          <ion-select [(ngModel)]="inserzione.categoria.id" placeholder="Select One">
+            <ng-container *ngFor="let categoria of categorie">
+              <ion-option [value]="categoria.id">{{categoria.nome}}</ion-option>
+            </ng-container>
           </ion-select>
         </ion-item>
         <ion-item>
           <ion-label>Materiali</ion-label>
-          <ion-select [(ngModel)]="materialiSelezionati" multiple="true" placeholder="Select Some" ngDefaultControl>
-            <ion-option *ngFor="let materiale of materiali" [value]="materiale">{{materiale.nome}}</ion-option>
+          <ion-select [(ngModel)]="idMateriali" multiple="true" placeholder="Select Some" >
+            <ion-option *ngFor="let materiale of materiali" [value]="materiale.id">{{materiale.nome}}</ion-option>
           </ion-select>
         </ion-item>
         <ion-item>
           <ion-label>Paese</ion-label>
-          <ion-select [(ngModel)]="paese" placeholder="Select One" ngDefaultControl>
-            <ion-option *ngFor="let paese of paesi" [value]="paese">{{paese.nome}}</ion-option>
+          <ion-select [(ngModel)]="inserzione.paese.id" placeholder="Select One" >
+            <ion-option *ngFor="let paese of paesi" [value]="paese.id">{{paese.nome}}</ion-option>
           </ion-select>
         </ion-item>
+        <ion-item>
+            <button ion-button (click)="modalImmagini()" color="primary">Immagini</button>
+          </ion-item>
       </ion-list>
     </ion-slide>
     <ion-slide>
       <ion-list>
         <ion-item>
           <ion-label>Titolo</ion-label>
-          <ion-input [(ngModel)]="titolo" placeholder="inserisci qui il titolo" ngDefaultControl></ion-input>
+          <ion-input [(ngModel)]="inserzione.titolo" placeholder="inserisci qui il titolo"></ion-input>
         </ion-item>
         <ion-item>
           <ion-label>Descrizione</ion-label>
-          <ion-input [(ngModel)]="descrizione"placeholder="inserisci qui la descrizione"  ngDefaultControl></ion-input>
+          <ion-input [(ngModel)]="inserzione.descrizione"placeholder="inserisci qui la descrizione"></ion-input>
         </ion-item>
         <ion-item>
           <ion-label  >Prezzo</ion-label>
-          <ion-input [(ngModel)]="prezzo" type="number" placeholder="0" ngDefaultControl></ion-input>
+          <ion-input [(ngModel)]="inserzione.prezzo" type="number" placeholder="0"></ion-input>
         </ion-item>
 
         <ion-item>
-          <button (click)="pubblica()" color="primary">Pubblica</button>
-        </ion-item>
-        <ion-item>
-          <button (click)="aggiorna()" color="primary">Aggiorna (da cancellare)</button>
-        </ion-item>
-        <ion-item>
-          <button (click)="aggiungiImmagine(0)" color="primary">Carica immagine</button>
+          <button ion-button (click)="pubblica()" color="primary">Pubblica</button>
         </ion-item>
       </ion-list>
     </ion-slide>

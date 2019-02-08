@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams, App, Events } from 'ionic-angular';
+import { IonicPage, NavController, NavParams, App, Events, AlertController } from 'ionic-angular';
 import { Inserzione } from '../../model/inserzione';
 import { UtenteService } from '../../services/utente.service';
 import { DETTAGLIO_INSERZIONE_PAGE } from '../pages';
@@ -19,7 +19,7 @@ import { TranslateService } from '@ngx-translate/core';
 })
 export class PreferitiPage {
   preferiti : Inserzione[] = [];
-  constructor(public app: App, public navCtrl: NavController, public navParams: NavParams, public utenteService : UtenteService, public translateService : TranslateService, public events : Events) {
+  constructor(public app: App, public navCtrl: NavController, public navParams: NavParams, public utenteService : UtenteService, public translateService : TranslateService, public events : Events, public alertController : AlertController) {
     this.utenteService.getInserzioniPreferite().subscribe(
       (preferiti) => {
         for(let preferito of preferiti){
@@ -28,7 +28,7 @@ export class PreferitiPage {
         this.preferiti = preferiti;
       },
       (err) => {
-        //error handling
+        this.showPreferitiError();
       }
     );
     events.subscribe("refreshPreferiti", () => {
@@ -40,13 +40,24 @@ export class PreferitiPage {
           this.preferiti = preferiti;
         },
         (err) => {
-          //error handling
+          this.showPreferitiError();
         }
       );
     });
   }
 
-
+  showPreferitiError(){
+    this.alertController.create({
+      title: "Oh no!",
+      message: "Si è verificato un errore nel recupero delle tue inserzioni preferite. Riprova più tardi!",
+      buttons : [{
+        text: "Capito",
+        handler: () => {
+          this.navCtrl.popToRoot();
+        }
+      }]
+    }).present();
+  }
 
   getCurrentLang() : string{
     return this.translateService.currentLang;
@@ -59,7 +70,6 @@ export class PreferitiPage {
   eliminaPreferito(idPreferito : number){
     this.utenteService.deleteInserzionePreferita(idPreferito).subscribe(
       (ok) => {
-        //mostra alert
         for(let i = 0; i < this.preferiti.length; i++){
           if(this.preferiti[i].id == idPreferito.toString()){
             this.preferiti.splice(i, 1);
@@ -68,9 +78,19 @@ export class PreferitiPage {
         }
       },
       (err) => {
-        //mostra alert
+        this.showDeletePreferitoError();
       }
     );
+  }
+
+  showDeletePreferitoError(){
+    this.alertController.create({
+      title: "Oh no!",
+      message: "Si è verificato un errore nell'eliminazione dell'inserzione dai preferiti. Riprova più tardi!",
+      buttons : [{
+        text: "Capito"
+      }]
+    }).present();
   }
 
 }

@@ -30,7 +30,7 @@ export class DettaglioInserzionePage {
         this.setIsInserzionePreferita();
       },
       (err) => {
-        //Error handling
+        this.showInserzioneError();
       }
     );
     events.subscribe("invia-messaggio", (messaggio) => {
@@ -39,7 +39,7 @@ export class DettaglioInserzionePage {
           this.navCtrl.push(CHAT_PAGE, {"idConversazione" : newConversationId});
         },
         (err) => {
-          //error handling
+          this.showContattoError();
         }
       );
     });
@@ -47,6 +47,29 @@ export class DettaglioInserzionePage {
 
   getCurrentLang(){
     return this.translateService.currentLang;
+  }
+
+  showInserzioneError(){
+    this.alertController.create({
+      title: "Oh no!",
+      message: "Si è verificato un errore durante la visualizzazione dell'inserzione. Riprova più tardi!",
+      buttons : [{
+        text: "Capito",
+        handler : () => {
+          this.navCtrl.pop();
+        }
+      }]
+    }).present();
+  }
+
+  showContattoError(){
+    this.alertController.create({
+      title: "Oh no!",
+      message: "Si è verificato un errore nel contattare l'inserzionista. Riprova più tardi!",
+      buttons : [{
+        text: "Capito"
+      }]
+    }).present();
   }
 
   setIsInserzionePreferita(){
@@ -79,7 +102,7 @@ export class DettaglioInserzionePage {
           this.showFirstMessagePopup();
         },
         (err) => {
-          //error handling
+          this.showContattoError();
         }
       );
     } else {
@@ -95,6 +118,36 @@ export class DettaglioInserzionePage {
     
   }
 
+  showAddPreferitoError(){
+    this.alertController.create({
+      title: "Oh no!",
+      message: "Si è verificato un errore nell'aggiungere l'inserzione ai preferiti. Riprova più tardi!",
+      buttons : [{
+        text: "Capito"
+      }]
+    }).present();
+  }
+
+  showRemovePreferitoError(){
+    this.alertController.create({
+      title: "Oh no!",
+      message: "Si è verificato un errore nel rimuovere l'inserzione dai preferiti. Riprova più tardi!",
+      buttons : [{
+        text: "Capito"
+      }]
+    }).present();
+  }
+
+  showRecuperaPreferitiError(){
+    this.alertController.create({
+      title: "Oh no!",
+      message: "Si è verificato un errore nella gestione delle inserzioni preferite. Riprova più tardi!",
+      buttons : [{
+        text: "Capito"
+      }]
+    }).present();
+  }
+
   addRemovePreferito(idPreferito : string){
     if(this.utenteLoggato.email != ""){
     this.utenteService.getInserzioniPreferite().subscribe(
@@ -106,7 +159,7 @@ export class DettaglioInserzionePage {
                 this.isInserzionePreferita = false;
               },
               (err) => {
-                //error handling
+                this.showRemovePreferitoError();
               }
             );
             return;
@@ -117,12 +170,12 @@ export class DettaglioInserzionePage {
             this.isInserzionePreferita = true;
           },
           (err) => {
-            //error handling
+            this.showAddPreferitoError();
           }
         );
       },
       (err) => {
-        //error handling
+        this.showRecuperaPreferitiError();
       }
     );
     } else {

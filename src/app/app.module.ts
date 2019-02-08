@@ -21,6 +21,8 @@ import { RicercaService } from '../services/ricerca.service';
 import { InserzioneService } from '../services/inserzione.service';
 import { MieInserzioniPageModule } from '../pages/mie-inserzioni/mie-inserzioni.module';
 import { NewMessageModal } from '../pages/dettaglio-inserzione/dettaglio-inserzione';
+import { SelezioneImmagini } from '../pages/pubblica-inserzione/selezione-immagini';
+import { Camera } from '@ionic-native/camera';
 
 export function createTranslateLoader(http: HttpClient) {
   return new TranslateHttpLoader(http, './assets/i18n/', '.json');
@@ -31,7 +33,8 @@ export function createTranslateLoader(http: HttpClient) {
     MyApp,
     HomePage,
     PopMenu,
-    NewMessageModal
+    NewMessageModal,
+    SelezioneImmagini
   ],
   imports: [
     BrowserModule,
@@ -55,7 +58,8 @@ export function createTranslateLoader(http: HttpClient) {
     MessaggiPage,
     MieInserzioniPage,
     PopMenu,
-    NewMessageModal
+    NewMessageModal,
+    SelezioneImmagini
   ],
   providers: [
     StatusBar,
@@ -66,7 +70,8 @@ export function createTranslateLoader(http: HttpClient) {
     FiltriService,
     InserzioneService,
     httpInterceptorProviders,
-    {provide: ErrorHandler, useClass: IonicErrorHandler}
+    {provide: ErrorHandler, useClass: IonicErrorHandler},
+    Camera
   ]
 })
 export class AppModule {}

@@ -1,4 +1,4 @@
-export const URL_BASE = 'http://localhost:8080/CraftAwayREST/rest';
+export const URL_BASE = 'http://192.168.1.76:8081/CraftAwayREST/rest';
 
 export const URL = {
     ACCOUNT: URL_BASE + "/account",

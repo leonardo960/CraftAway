@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams } from 'ionic-angular';
+import { IonicPage, NavController, NavParams, AlertController } from 'ionic-angular';
 import { ChatService } from "../../services/chat.service";
 import { Conversazione } from "../../model/conversazione";
 import { Messaggio } from "../../model/messaggio";
@@ -22,7 +22,7 @@ import { UtenteService } from "../../services/utente.service";
 export class MessaggiPage {
   conversazioni: Conversazione[] = [];
   conversazioniLoaded : boolean = false;
-  constructor(public utenteService: UtenteService, public navCtrl: NavController, public navParams: NavParams, public chatService: ChatService) {
+  constructor(public utenteService: UtenteService, public navCtrl: NavController, public navParams: NavParams, public chatService: ChatService, public alertController : AlertController) {
     chatService.getConversations().subscribe(
       (conversazioni) => {
           for(let i = 0; i < conversazioni.length; i++){
@@ -36,9 +36,22 @@ export class MessaggiPage {
           this.conversazioniLoaded = true;
       },
       (err) => {
-        console.log(err);
+        this.showConversazioniError();
       }
     );
+  }
+
+  showConversazioniError(){
+    this.alertController.create({
+      title: "Oh no!",
+      message: "Si è verificato un errore nel recupero delle tue chat. Riprova più tardi!",
+      buttons : [{
+        text: "Capito",
+        handler : () => {
+          this.navCtrl.pop();
+        }
+      }]
+    }).present();
   }
 
   ionViewDidLoad() {
@@ -60,7 +73,7 @@ export class MessaggiPage {
             }
         },
         (err) => {
-          console.log(err);
+          this.showConversazioniError();
         }
       );
     }

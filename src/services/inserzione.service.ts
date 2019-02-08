@@ -22,8 +22,7 @@ export class InserzioneService {
     }
 
     deleteInserzione(idInserzione: string){
-      let headers : HttpHeaders = new HttpHeaders({"idInserzione" : idInserzione});
-      return this.http.delete<any>(URL.INSERZIONI, {headers: headers});
+      return this.http.delete<any>(URL.INSERZIONI, {params : {"idInserzione" : idInserzione}});
     }
 
     modifyInserzione(inserzione: Inserzione){
